@@ -15,9 +15,10 @@ namespace Model
         public string Email { get; set; }
         public int Age { get; set; }
         public bool HasMobile { get; set; }
-        public static string ParentName { get; set; }
+        public string ParentName { get; set; }
 
         public bool CanVote { get; set; }
+        public string FamilyName { get; set; }
 
 
 

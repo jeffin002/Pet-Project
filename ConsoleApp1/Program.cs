@@ -1,13 +1,23 @@
 ﻿using Model;
+using DAL;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Channels;
+using System.Configuration;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
+        var builder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
+        IConfiguration _configuration = builder.Build();
+        var myConnectionString1 = _configuration.GetConnectionString("MyConnection");
+       
 
 
         Person p1 = new Person();
@@ -21,6 +31,7 @@ internal class Program
         //Console.WriteLine("what is ur age");
         p1.Age = 21;
         p1.CanVote=p1.Age > 18;
+        p1.FamilyName = "hello";
 
         Person p2 = new Person();
         p2.Id = 2;
@@ -33,6 +44,7 @@ internal class Program
         //Console.WriteLine("what is ur age");
         p2.Age = 12;
         p2.CanVote=p2.Age > 18;
+        p2.FamilyName = "welcome";
 
         
 
@@ -85,13 +97,17 @@ internal class Program
 
         foreach (Person person in personlist) 
         {
-            if (person.CanVote)
-            {
-                Console.WriteLine($"ID:{person.Id} NAME:{p1.FirstName} LastName:{p1.LastName}  EMAIL:{p1.Email}  AGE:{p1.Age}  " +
-                    $"ELIGIBILITY:{p1.CanVote} TITLE:{person.Title} HasMobile:{person.HasMobile}");
+            PersonAccess pa1= new PersonAccess();
+            //string connection = System.Configuration.ConfigurationManager.ConnectionStrings("NetConnectionString");
+            pa1.ConnectionString=myConnectionString1;
+            pa1.AddPerson(person);
+            //if (person.CanVote)
+            //{
+            //    Console.WriteLine($"ID:{person.Id} NAME:{p1.FirstName} LastName:{p1.LastName}  EMAIL:{p1.Email}  AGE:{p1.Age}  " +
+            //        $"ELIGIBILITY:{p1.CanVote} TITLE:{person.Title} HasMobile:{person.HasMobile}");
                 
 
-            }
+            //}
         }
         Console.ReadLine();  
         

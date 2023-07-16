@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
+
 namespace DAL
 {
     public class PersonAccess
@@ -17,19 +18,29 @@ namespace DAL
         public string ConnectionString { get; set; }
         public void AddPerson(Person person)
         {
-            using (SqlConnection con = new SqlConnection(connectionString))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
-                SqlCommand objSqlCommand = new SqlCommand("GetEmployeeList", con);
-                objSqlCommand.CommandType = CommandType.StoredProcedure;
+                
 
                 try
                 {
+                    SqlCommand objSqlCommand = new SqlCommand("dbo.CreatePerson", con);
+                    objSqlCommand.CommandType = CommandType.StoredProcedure;
+                    objSqlCommand.Parameters.AddWithValue("@FirstName", person.FirstName);
+                    objSqlCommand.Parameters.AddWithValue("@LastName", person.LastName);
+                    objSqlCommand.Parameters.AddWithValue("@Email", person.Email);
+                    objSqlCommand.Parameters.AddWithValue("@Age", person.Age);
+                    objSqlCommand.Parameters.AddWithValue("@FamilyName", person.FamilyName);
+                    objSqlCommand.Parameters.AddWithValue("@CanVote", person.CanVote);
 
+
+                    con.Open();
+                    objSqlCommand.ExecuteNonQuery();
 
                 }
                 catch (Exception ex)
                 {
-
+                    throw;
                 }
             }
         }
