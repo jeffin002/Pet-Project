@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using System.Diagnostics;
 using Web.Mvc.Models;
 
 namespace Web.Mvc.Controllers
 {
-    public class HomeController : Controller 
+    public class DoctorController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<DoctorController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public DoctorController(ILogger<DoctorController> logger)
         {
             _logger = logger;
         }
@@ -18,7 +17,7 @@ namespace Web.Mvc.Controllers
         public IActionResult Index()
         {
             //ViewData["Date"] = DateOnly.FromDateTime(DateTime.Now);
-            
+
             return View();
         }
 

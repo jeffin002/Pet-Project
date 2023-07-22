@@ -17,8 +17,8 @@ internal class Program
                         .AddJsonFile("appSettings.json", optional: true, reloadOnChange: true);
         IConfiguration _configuration = builder.Build();
         var myConnectionString1 = _configuration.GetConnectionString("MyConnection");
-       
 
+        Person p = new Person("jeffin", "reji");
 
         Person p1 = new Person();
         p1.Id = 1;
