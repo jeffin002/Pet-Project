@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DAL;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Model;
 using System.Diagnostics;
 using Web.Mvc.Models;
 
@@ -14,11 +16,11 @@ namespace Web.Mvc.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            //ViewData["Date"] = DateOnly.FromDateTime(DateTime.Now);
-
-            return View();
+            Doctor doctor = new Doctor();
+            return View(doctor);
         }
 
         public IActionResult Privacy()
@@ -32,5 +34,8 @@ namespace Web.Mvc.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        
+        
     }
 }
