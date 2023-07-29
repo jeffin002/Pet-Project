@@ -6,15 +6,21 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace DAL
 {
     public class DoctorAccess
     {
-        public string ConnectionString { get; set; }
+        private readonly string _connectionString;
+        public DoctorAccess(IConfiguration config)
+        {
+            _connectionString = config.GetConnectionString("MyConnection");
+        }
+       
         public void AddDoctor(Doctor doctor)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(_connectionString))
             {
 
 
