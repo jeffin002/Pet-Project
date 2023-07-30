@@ -23,9 +23,11 @@
             data: JSON.stringify(doctor),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+
             success: function (response) {
+                console.log(response);
                 if (response != null) {
-                    alert("Name : " + response.Name + ", Designation : " + response.Designation + ", Location :" + response.Location);
+                    alert("Name : " + response.firstName);
                 } else {
                     alert("Something went wrong");
                 }
@@ -34,6 +36,7 @@
                 alert(response.responseText);
             },
             error: function (response) {
+                console.log(response);
                 alert(response.responseText);
             }
         });

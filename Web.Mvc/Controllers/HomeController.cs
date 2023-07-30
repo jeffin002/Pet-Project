@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using System.Diagnostics;
-using Web.Mvc.Models;
+
 
 namespace Web.Mvc.Controllers
 {
@@ -28,10 +28,6 @@ namespace Web.Mvc.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+       
     }
 }

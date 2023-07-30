@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Model;
 using System.Diagnostics;
+using System.Net;
+//using System.Web.Mvc;
 using Web.Mvc.Models;
 
 namespace Web.Mvc.Controllers
@@ -25,13 +27,22 @@ namespace Web.Mvc.Controllers
             Doctor doctor = new Doctor();
             return View(doctor);
         }
-
+        
         [HttpPost]
         public IActionResult Index([FromBody] Doctor doctor)
         {
-            DoctorAccess doctorAccess = new DoctorAccess(_config);
-            doctorAccess.AddDoctor(doctor);
-            return Json(new { message = "success" });
+            try
+            {
+                DoctorAccess doctorAccess = new DoctorAccess(_config);
+                doctorAccess.AddDoctor(doctor);
+                return Json(new { message = "success", firstName = "jeffin" });
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500,new { messege = "Error",discription="an error occured while proessing ur request" });
+               
+            }
+           
         }
 
         public IActionResult Privacy()
