@@ -3,13 +3,15 @@
         event.preventDefault();
         var firstName = $('#firstname').val();
         var lastName = $('#lastname').val();
-        var email = $('.email').val();
+        var email = $('#email').val();
+        var description = $('#description').val();
 
         //create doctor javascript object
         var doctor = {
             firstName: firstName,
             lastName: lastName,
-            email: email            
+            email: email,  
+            description: description
         };
 
         var doctorJson = JSON.stringify(doctor);

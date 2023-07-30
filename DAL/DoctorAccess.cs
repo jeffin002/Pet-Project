@@ -31,6 +31,7 @@ namespace DAL
                     objSqlCommand.Parameters.AddWithValue("@FirstName", doctor.FirstName);
                     objSqlCommand.Parameters.AddWithValue("@LastName", doctor.LastName);
                     objSqlCommand.Parameters.AddWithValue("@Email", doctor.Email);
+                    objSqlCommand.Parameters.AddWithValue("@Description", doctor.Description);
 
 
 
