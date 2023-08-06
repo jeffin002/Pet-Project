@@ -14,4 +14,5 @@ namespace Model
         public int BreedId { get; set; }
 
     }
+
 }

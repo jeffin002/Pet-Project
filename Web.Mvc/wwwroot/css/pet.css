@@ -4,3 +4,9 @@
 .margin-30{
     margin-top:10px;
 }
+.button-width{
+    width:120px;
+}
+.field-validation-error{
+    color:red;
+}

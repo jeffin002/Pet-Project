@@ -5,6 +5,50 @@
         var lastName = $('#lastname').val();
         var email = $('#email').val();
         var description = $('#description').val();
+        var isformvalid = true;
+        clearPreValidationErrors();
+       
+        if (!firstName) {
+            console.log('inside firstname:',firstName);
+            $('.spnfirstname').text('FirstName is Required!').addClass('field-validation-error').show();
+            
+        }
+
+        if (!lastName) {
+            $('.spnlastname').text('LastName is Required!').addClass('field-validation-error').show();
+
+        }
+
+        if (!email) {
+            $('.spnemail').text('Email is Required!').addClass('field-validation-error').show();
+
+        }
+
+        if (!description) {
+            $('.spndescription').text('Description is Required!').addClass('field-validation-error').show();
+
+        }
+
+        if (!firstName || !lastName || !email || !description) {
+            console.log(firstName);
+            isformvalid = false;
+            return false;
+        }
+
+        function clearPreValidationErrors() {
+            if (firstName) {
+                $('.spnfirstname').hide();
+            }
+            if (lastName) {
+                $('.spnlastname').hide();
+            }
+            if (email) {
+                $('.spnemail').hide();
+            }
+            if (description) {
+                $('.spndescription').hide();
+            }
+        }
 
         //create doctor javascript object
         var doctor = {
