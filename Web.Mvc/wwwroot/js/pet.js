@@ -125,8 +125,10 @@
     $('#btncreate').click(function (event) {
         event.preventDefault();
         var petname = $('#petname').val();
-        var petid = $('#petTypeSelect').val();
-        var petbreed = $('#ddl-breed').val();
+        var pettypeid = $('#petTypeSelect').val();
+        console.log('pettypeid', pettypeid);
+        var petbreedtypeid = $('#ddl-breed').val();
+        console.log('petbreedtypeid', petbreedtypeid);
         var doctorname = $('doctorname').val();
         var description = $('#description').val();
         var isformvalid = true;
@@ -136,8 +138,8 @@
             $('.spnpetname').text('petname is Required!').addClass('field-validation-error').show();
 
         }
-        if (!petid) {
-            console.log('inside petid:', petid);
+        if (!pettypeid) {
+            console.log('inside pettypeid:', pettypeid);
             $('.spnpetid').text('pettype is Required!').addClass('field-validation-error').show();
 
         }

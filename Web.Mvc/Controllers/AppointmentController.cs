@@ -117,6 +117,32 @@ namespace Web.Mvc.Controllers
             List<Breed> breedList = await a.GetBreedsByPetTypeId(petTypeId);
             return Json(breedList);
         }
+
+        [HttpPost]
+        public IActionResult CreateAppointment([FromBody] Appointment request)
+        {
+            try
+            {
+                request.StatusId=(int)StatusEnum.Scheduled;
+                AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
+                appointmentAccess.AddAppointment(request);
+                return Json(new { message = "success"});
+            }
+            catch (System.Exception)
+            {
+                return StatusCode(500, new { messege = "Error", discription = "an error occured while proessing ur request" });
+
+            }
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllAppointments()
+        {
+            //AppointmentAccess a = new AppointmentAccess(_config);
+
+            //List<Breed> breedList = await a.GetBreedsByPetTypeId(petTypeId);
+            return null;
+        }
     }
 }
 

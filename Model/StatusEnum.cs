@@ -1,6 +1,6 @@
 ﻿namespace Model
 {
-    public enum StatusEnum : byte
+    public enum StatusEnum
     {
         Scheduled=1,
         Cancelled,
