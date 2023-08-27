@@ -10,3 +10,6 @@
 .field-validation-error{
     color:red;
 }
+.hidden{
+    display: none;
+}

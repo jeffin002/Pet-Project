@@ -1,0 +1,61 @@
+﻿@model Model.Appointment
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>APPOINTMENT</h1>
+
+@*<h4>Appointment</h4>*@
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PetName" class="control-label"></label>
+                <input asp-for="PetName"id="petname" class="form-control" />
+                <span class="spnpetname"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PetType" class="control-label"></label>
+                <select id="petTypeSelect" class="form-control">
+                    <option value="0">Select a pet breed</option>
+                    <option value="1">Cat</option>
+                    <option value="2">Dog</option>
+                    <option value="3">Rabbit</option>
+                </select>
+                <span class="spnpetid"></span>
+            </div>
+
+            <div class="form-group hidden" id="dvbreedtype">
+                <label asp-for="PetBreed"  class="control-label"></label>
+                <select id="ddl-breed"  class="form-control ">                   
+                </select>
+                <span class="spnpetbreed"></span>
+            </div>
+           
+            <div class="form-group">
+                <label asp-for="DoctorName" class="control-label"></label>
+                <input asp-for="DoctorName" id="doctorname" class="form-control" />
+                <span class="spndoctorname"></span>
+            </div>                       
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" id="description" class="form-control" />
+                <span class="spndescription"></span>
+            </div>
+            <div class="form-group margin-30">
+                <input type="submit" id="btncreate" value="Create Appointment" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
