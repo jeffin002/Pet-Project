@@ -18,49 +18,29 @@ namespace DAL
         {
             _connectionString = config.GetConnectionString("MyConnection");
         }
-       
+
         public void AddAppointment(Appointment appointment)
         {
-            using (SqlConnection con = new SqlConnection(_connectionString))
+            try
             {
-
-
-                try
+                using (SqlConnection con = new SqlConnection(_connectionString))
                 {
                     SqlCommand objSqlCommand = new SqlCommand("dbo.CreateAppointment", con);
                     objSqlCommand.CommandType = CommandType.StoredProcedure;
+                    objSqlCommand.Parameters.AddWithValue("@PetName", appointment.PetName);
                     objSqlCommand.Parameters.AddWithValue("@Descripton", appointment.Description);
                     objSqlCommand.Parameters.AddWithValue("@DoctorId", appointment.DoctorId);
-                    objSqlCommand.Parameters.AddWithValue("@PetId", appointment.PetId);
+                    objSqlCommand.Parameters.AddWithValue("@BreedId", appointment.BreedId);
                     objSqlCommand.Parameters.AddWithValue("@StatusId", appointment.StatusId);
                     con.Open();
                     objSqlCommand.ExecuteNonQuery();
                 }
-                catch (Exception ex)
-                {
-                    throw;
-                }
-               
             }
-            //using (SqlConnection con = new SqlConnection(_connectionString))
-            //{
+            catch (Exception ex)
+            {
 
-
-            //    try
-            //    {
-            //        SqlCommand objSqlCommand = new SqlCommand("dbo.GetBreedTypeListByPetTypeId", con);
-            //        objSqlCommand.CommandType = CommandType.StoredProcedure;
-            //        objSqlCommand.Parameters.AddWithValue("@Id", ) ;                   
-            //        con.Open();
-            //        objSqlCommand.ExecuteNonQuery();
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        throw;
-            //    }
-
-            //}
-
+                throw;
+            }
         }
 
         public async Task<List<Breed>> GetBreedsByPetTypeId(int petTypeId)
@@ -71,21 +51,21 @@ namespace DAL
             {
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
-                     con.Open();
+                    con.Open();
                     using (var command = new SqlCommand("dbo.GetBreedTypesByPetTypeId", con))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.AddWithValue("@Id",petTypeId);
-                        SqlDataReader rdr=await command.ExecuteReaderAsync();
-                        while (rdr.Read()) 
+                        command.Parameters.AddWithValue("@Id", petTypeId);
+                        SqlDataReader rdr = await command.ExecuteReaderAsync();
+                        while (rdr.Read())
                         {
-                            Breed brd =new Breed();
+                            Breed brd = new Breed();
                             brd.Name = (string)rdr["Name"];
                             brd.Id = Convert.ToInt32(rdr["Id"]);
                             breedList.Add(brd);
                         }
                     }
-                }              
+                }
 
             }
             catch (Exception ex)
@@ -95,6 +75,37 @@ namespace DAL
             }
             return breedList;
         }
-    }
 
+        public async Task<List<Doctor>> AllDoctorList()
+        {
+            List<Doctor> doctorList = new List<Doctor>();
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    con.Open();
+                    using (var command = new SqlCommand("dbo.AllDoctorList", con))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        SqlDataReader rdr = await command.ExecuteReaderAsync();
+                        while (rdr.Read())
+                        {
+                            Doctor dr = new Doctor();                            
+                            dr.FirstName= (string)rdr["FirstName"];
+                            dr.Id = Convert.ToInt32(rdr["Id"]);
+                            doctorList.Add(dr);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return doctorList;
+        }
+
+    }
 }

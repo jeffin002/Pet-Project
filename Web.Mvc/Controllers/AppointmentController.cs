@@ -46,7 +46,7 @@ namespace Web.Mvc.Controllers
             try
             {
                 AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
-                appointmentAccess.AddAppointment(new Appointment());
+                appointmentAccess.AddAppointment(appointment);
                 return Json(new { message = "success"});
             }
             catch (System.Exception)
@@ -136,12 +136,19 @@ namespace Web.Mvc.Controllers
 
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllAppointments()
+        public async Task<ActionResult<List<Doctor>>> GetAllDoctors()
         {
-            //AppointmentAccess a = new AppointmentAccess(_config);
-
-            //List<Breed> breedList = await a.GetBreedsByPetTypeId(petTypeId);
-            return null;
+            try
+            {
+                AppointmentAccess a = new AppointmentAccess(_config);
+                List<Doctor> doctorList = await a.AllDoctorList();
+                return Ok(doctorList);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here
+                return StatusCode(500, "An error occurred while fetching doctors.");
+            }
         }
     }
 }

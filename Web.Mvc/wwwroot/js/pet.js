@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+   
+    getAllDoctors();
     $('#btnsubmit').click(function (event) {
         event.preventDefault();
         var firstName = $('#firstname').val();
@@ -129,56 +131,123 @@
         console.log('pettypeid', pettypeid);
         var petbreedtypeid = $('#ddl-breed').val();
         console.log('petbreedtypeid', petbreedtypeid);
-        var doctorname = $('doctorname').val();
+        var doctorname = $('#doctorname').val();
+        console.log('doctorname', doctorname);
         var description = $('#description').val();
         var isformvalid = true;
-        clearPreValidationErrors();
-        if (!petname) {
-            console.log('inside petname:', petname);
-            $('.spnpetname').text('petname is Required!').addClass('field-validation-error').show();
+        //clearPreValidationErrors();
+        //if (!petname) {
+        //    console.log('inside petname:', petname);
+        //    $('.spnpetname').text('petname is Required!').addClass('field-validation-error').show();
 
-        }
-        if (!pettypeid) {
-            console.log('inside pettypeid:', pettypeid);
-            $('.spnpetid').text('pettype is Required!').addClass('field-validation-error').show();
+        //}
+        //if (!pettypeid) {
+        //    console.log('inside pettypeid:', pettypeid);
+        //    $('.spnpetid').text('pettype is Required!').addClass('field-validation-error').show();
 
-        }
-        if (!petbreed) {
-            console.log('inside petbreed:', petbreed);
-            $('.spnpetbreed').text('petbreed is Required!').addClass('field-validation-error').show();
+        //}
+        //if (!petbreed) {
+        //    console.log('inside petbreed:', petbreed);
+        //    $('.spnpetbreed').text('petbreed is Required!').addClass('field-validation-error').show();
 
-        }
-        if (!doctorname) {
-            console.log('inside doctorname:', doctorname);
-            $('.spndoctorname').text('doctorname is Required!').addClass('field-validation-error').show();
+        //}
+        //if (!doctorname) {
+        //    console.log('inside doctorname:', doctorname);
+        //    $('.spndoctorname').text('doctorname is Required!').addClass('field-validation-error').show();
 
-        }
-        if (!description) {
-            console.log('inside description:', description);
-            $('.spndescription').text('description is Required!').addClass('field-validation-error').show();
+        //}
+        //if (!description) {
+        //    console.log('inside description:', description);
+        //    $('.spndescription').text('description is Required!').addClass('field-validation-error').show();
 
-        }
-        if (!petname || !petid || !petbreed || !doctorname || !description) {
-            console.log(firstName);
-            isformvalid = false;
-            return false;
-        }
-        function clearPreValidationErrors() {
-            if (petname) {
-                $('.spnfirstname').hide();
+        //}
+        //if (!petname || !petid || !petbreed || !doctorname || !description) {
+        //    console.log(firstName);
+        //    isformvalid = false;
+        //    return false;
+        //}
+        //function clearPreValidationErrors() {
+        //    if (petname) {
+        //        $('.spnfirstname').hide();
+        //    }
+        //    if (petid) {
+        //        $('.spnlastname').hide();
+        //    }
+        //    if (petbreed) {
+        //        $('.spnemail').hide();
+        //    }
+        //    if (doctorname) {
+        //        $('.spnemail').hide();
+        //    }
+        //    if (description) {
+        //        $('.spndescription').hide();
+        //    }
+        //}
+
+        var appointment = {
+            petName: petname,
+            petTypeId: pettypeid,
+            breedId: petbreedtypeid,
+            doctorName: doctorname,
+            description: description
+
+        };
+        var appointmentJson = JSON.stringify(appointment);
+        console.log(appointmentJson);
+
+        $.ajax({
+            type: "POST",
+            url: "/Appointment/Index",
+            data: appointmentJson,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+                    alert("petname : " + response.petname);
+                } else {
+                    alert("Something went wrong");
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                console.log(response);
+                alert(response.responseText);
             }
-            if (petid) {
-                $('.spnlastname').hide();
-            }
-            if (petbreed) {
-                $('.spnemail').hide();
-            }
-            if (doctorname) {
-                $('.spnemail').hide();
-            }
-            if (description) {
-                $('.spndescription').hide();
-            }
-        }
+        });
     });
+    function getAllDoctors() {
+        $.ajax({
+            type: "GET",
+            url: "/Appointment/GetAllDoctors",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                console.log(response);
+                if (response != null) {
+                    $.each(response, function (index, doctor) {
+                        console.log("doctor is:", doctor);
+                        console.log("index is :", index);
+                        $('#ddl-doctor').append($('<option>').text(doctor.firstName).attr('value', doctor.id));
+                    });
+                } else {
+                    alert("Something went wrong");
+                }
+            },
+            failure: function (response) {
+                alert(response.responseText);
+            },
+            error: function (response) {
+                console.log(response);
+                alert(response.responseText);
+            }
+        });
+    }
+
+   
+       
+   
+
 });
