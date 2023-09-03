@@ -19,6 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="PetType" class="control-label"></label>
+                <div class="select-wrapper">
                 <select id="petTypeSelect" class="form-control">
                     <option value="0">Select a pet breed</option>
                     <option value="1">Cat</option>
@@ -26,21 +27,27 @@
                     <option value="3">Rabbit</option>
                 </select>
                 <span class="spnpetid"></span>
+                </div>
             </div>
 
-            <div class="form-group hidden" id="dvbreedtype">
+            <div class="form-group hidden " id="dvbreedtype">
                 <label asp-for="PetBreed"  class="control-label"></label>
+                <div class="select-wrapper">
                 <select id="ddl-breed"  class="form-control ">                   
                 </select>
                 <span class="spnpetbreed"></span>
+                </div>
             </div>
-           
-            <div class="form-group">
-                <label asp-for="DoctorName" class="control-label"></label>
-                <select id="ddl-doctor" class="form-control ">
-                </select>
-                <span class="spndoctorname"></span>
-            </div>                       
+
+            <div class="form-group ">
+                <label asp-for="DoctorName" class="control-label"></label>  
+                <div class="select-wrapper">
+                    <select id="ddl-doctor" class="form-control">                        
+                    </select>
+                    <span class="spndoctorname"></span>                
+            </div>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" id="description" class="form-control" />

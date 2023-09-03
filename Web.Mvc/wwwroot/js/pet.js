@@ -125,64 +125,51 @@
 
     })
     $('#btncreate').click(function (event) {
+
         event.preventDefault();
         var petname = $('#petname').val();
         var pettypeid = $('#petTypeSelect').val();
         console.log('pettypeid', pettypeid);
         var petbreedtypeid = $('#ddl-breed').val();
         console.log('petbreedtypeid', petbreedtypeid);
-        var doctorname = $('#doctorname').val();
-        console.log('doctorname', doctorname);
+        var doctorname = $('#ddl-doctor').val();
+        console.log('doctorid', doctorname);
         var description = $('#description').val();
         var isformvalid = true;
-        //clearPreValidationErrors();
-        //if (!petname) {
-        //    console.log('inside petname:', petname);
-        //    $('.spnpetname').text('petname is Required!').addClass('field-validation-error').show();
+        clearPreValidationErrors();
+        if (!petname) {
+            console.log('inside petname:', petname);
+            $('.spnpetname').text('petname is Required!').addClass('field-validation-error').show();
+            isformvalid = false;
+        }
+        if (!pettypeid || pettypeid== 0 ) {
+            console.log('inside pettypeid:', pettypeid);
+            $('.spnpetid').text('pettype is Required!').addClass('field-validation-error').show();
+            isformvalid = false;
+        }
+        
+        if (!doctorname) {
+            console.log('inside doctorname:', doctorname);
+            $('.spndoctorname').text('doctorname is Required!').addClass('field-validation-error').show();
+            isformvalid = false;
+        }
+        if (!description) {
+            console.log('inside description:', description);
+            $('.spndescription').text('description is Required!').addClass('field-validation-error').show();
+            isformvalid = false;
+        }
+        if (!petbreedtypeid) {
+            console.log('inside petbreed:', petbreed);
+            $('.spnpetbreed').text('petbreed is Required!').addClass('field-validation-error').show();
+            isformvalid = false;
+        }
+        if (!isformvalid) {
+            return false; 
+        }        
+        function clearPreValidationErrors() {
+            $('.spnpetname, .spnpetid, .spnpetbreed, .spndoctorname, .spndescription').text('').removeClass('field-validation-error').hide();
+        }
 
-        //}
-        //if (!pettypeid) {
-        //    console.log('inside pettypeid:', pettypeid);
-        //    $('.spnpetid').text('pettype is Required!').addClass('field-validation-error').show();
-
-        //}
-        //if (!petbreed) {
-        //    console.log('inside petbreed:', petbreed);
-        //    $('.spnpetbreed').text('petbreed is Required!').addClass('field-validation-error').show();
-
-        //}
-        //if (!doctorname) {
-        //    console.log('inside doctorname:', doctorname);
-        //    $('.spndoctorname').text('doctorname is Required!').addClass('field-validation-error').show();
-
-        //}
-        //if (!description) {
-        //    console.log('inside description:', description);
-        //    $('.spndescription').text('description is Required!').addClass('field-validation-error').show();
-
-        //}
-        //if (!petname || !petid || !petbreed || !doctorname || !description) {
-        //    console.log(firstName);
-        //    isformvalid = false;
-        //    return false;
-        //}
-        //function clearPreValidationErrors() {
-        //    if (petname) {
-        //        $('.spnfirstname').hide();
-        //    }
-        //    if (petid) {
-        //        $('.spnlastname').hide();
-        //    }
-        //    if (petbreed) {
-        //        $('.spnemail').hide();
-        //    }
-        //    if (doctorname) {
-        //        $('.spnemail').hide();
-        //    }
-        //    if (description) {
-        //        $('.spndescription').hide();
-        //    }
-        //}
 
         var appointment = {
             petName: petname,
@@ -244,10 +231,6 @@
                 alert(response.responseText);
             }
         });
-    }
-
-   
-       
-   
+    } 
 
 });
