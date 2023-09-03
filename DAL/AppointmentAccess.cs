@@ -28,7 +28,7 @@ namespace DAL
                     SqlCommand objSqlCommand = new SqlCommand("dbo.CreateAppointment", con);
                     objSqlCommand.CommandType = CommandType.StoredProcedure;
                     objSqlCommand.Parameters.AddWithValue("@PetName", appointment.PetName);
-                    objSqlCommand.Parameters.AddWithValue("@Descripton", appointment.Description);
+                    objSqlCommand.Parameters.AddWithValue("@Description", appointment.Description);
                     objSqlCommand.Parameters.AddWithValue("@DoctorId", appointment.DoctorId);
                     objSqlCommand.Parameters.AddWithValue("@BreedId", appointment.BreedId);
                     objSqlCommand.Parameters.AddWithValue("@StatusId", appointment.StatusId);
@@ -85,7 +85,7 @@ namespace DAL
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
                     con.Open();
-                    using (var command = new SqlCommand("dbo.AllDoctorList", con))
+                    using (var command = new SqlCommand("dbo.GetAllDoctors", con))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         SqlDataReader rdr = await command.ExecuteReaderAsync();
@@ -93,6 +93,8 @@ namespace DAL
                         {
                             Doctor dr = new Doctor();                            
                             dr.FirstName= (string)rdr["FirstName"];
+                            dr.LastName= (string)rdr["LastName"];
+                            dr.FullName= (string)rdr["FullName"];
                             dr.Id = Convert.ToInt32(rdr["Id"]);
                             doctorList.Add(dr);
                         }

@@ -43,17 +43,10 @@ namespace Web.Mvc.Controllers
         [HttpPost]
         public IActionResult Index([FromBody] Appointment appointment)
         {
-            try
-            {
+                appointment.StatusId = (int)StatusEnum.Scheduled;
                 AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
                 appointmentAccess.AddAppointment(appointment);
-                return Json(new { message = "success"});
-            }
-            catch (System.Exception)
-            {
-                return StatusCode(500, new { messege = "Error", discription = "an error occured while processing ur request" });
-
-            }
+                return Json(new { message = "success"});            
         }
        
         [HttpGet]

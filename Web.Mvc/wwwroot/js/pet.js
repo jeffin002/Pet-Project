@@ -132,8 +132,8 @@
         console.log('pettypeid', pettypeid);
         var petbreedtypeid = $('#ddl-breed').val();
         console.log('petbreedtypeid', petbreedtypeid);
-        var doctorname = $('#ddl-doctor').val();
-        console.log('doctorid', doctorname);
+        var doctorid = $('#ddl-doctor').val();
+        console.log('doctorid', doctorid);
         var description = $('#description').val();
         var isformvalid = true;
         clearPreValidationErrors();
@@ -148,8 +148,8 @@
             isformvalid = false;
         }
         
-        if (!doctorname) {
-            console.log('inside doctorname:', doctorname);
+        if (!doctorid) {
+            console.log('inside doctorid:', doctorid);
             $('.spndoctorname').text('doctorname is Required!').addClass('field-validation-error').show();
             isformvalid = false;
         }
@@ -175,7 +175,7 @@
             petName: petname,
             petTypeId: pettypeid,
             breedId: petbreedtypeid,
-            doctorName: doctorname,
+            doctorid: doctorid,
             description: description
 
         };
@@ -211,13 +211,15 @@
             url: "/Appointment/GetAllDoctors",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {
-                console.log(response);
+            success: function (response) {                
                 if (response != null) {
-                    $.each(response, function (index, doctor) {
+                    var firstitem = { id: 0, fullName: 'select a doctor' };
+                    response.unshift(firstitem);
+                    console.log(response);
+                    $.each(response, function (index, doctor) {                        
                         console.log("doctor is:", doctor);
                         console.log("index is :", index);
-                        $('#ddl-doctor').append($('<option>').text(doctor.firstName).attr('value', doctor.id));
+                        $('#ddl-doctor').append($('<option>').text(doctor.fullName).attr('value', doctor.id));
                     });
                 } else {
                     alert("Something went wrong");
