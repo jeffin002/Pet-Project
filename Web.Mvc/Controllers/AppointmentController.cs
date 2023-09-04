@@ -40,14 +40,14 @@ namespace Web.Mvc.Controllers
             return View("appointment", appointment);
         }
 
-        [HttpPost]
-        public IActionResult Index([FromBody] Appointment appointment)
-        {
-                appointment.StatusId = (int)StatusEnum.Scheduled;
-                AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
-                appointmentAccess.AddAppointment(appointment);
-                return Json(new { message = "success"});            
-        }
+        //[HttpPost]
+        //public IActionResult Index([FromBody] Appointment appointment)
+        //{
+        //        appointment.StatusId = (int)StatusEnum.Scheduled;
+        //        AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
+        //        appointmentAccess.AddAppointment(appointment);
+        //        return Json(new { message = "success"});            
+        //}
        
         [HttpGet]
         public IActionResult PetId()

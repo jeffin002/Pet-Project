@@ -184,17 +184,12 @@
 
         $.ajax({
             type: "POST",
-            url: "/Appointment/Index",
+            url: "/Appointment/CreateAppointment",
             data: appointmentJson,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
-                console.log(response);
-                if (response != null) {
-                    alert("petname : " + response.petname);
-                } else {
-                    alert("Something went wrong");
-                }
+                window.location.href = 'Appointment/GetAllAppointments';
             },
             failure: function (response) {
                 alert(response.responseText);
@@ -234,5 +229,9 @@
             }
         });
     } 
+    $('.lnk-delete').click(function () {        
+        var appointmentId = $(this).data("id");
+        console.log(appointmentId);
+    });
 
 });
