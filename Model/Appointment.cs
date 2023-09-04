@@ -18,7 +18,9 @@ namespace Model
         public string PetBreed { get; set; }
         public string PetType { get; set; }
         public int BreedId { get; set; }
-
-
+        public string DoctorFullName { get; set; }
+        public string StatusName { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public DateTime UpdatedDateTime { get; set;}
     }
 }

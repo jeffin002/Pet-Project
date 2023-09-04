@@ -42,7 +42,11 @@ namespace DAL
                 throw;
             }
         }
-
+        /// <summary>
+        /// Get Breed By PetTypeId From The DataBase
+        /// </summary>
+        /// <param name="petTypeId">id of a pet type</param>
+        /// <returns></returns>
         public async Task<List<Breed>> GetBreedsByPetTypeId(int petTypeId)
         {
             List<Breed> breedList = new List<Breed>();
@@ -76,7 +80,7 @@ namespace DAL
             return breedList;
         }
 
-        public async Task<List<Doctor>> AllDoctorList()
+       public async Task<List<Doctor>> AllDoctorList()
         {
             List<Doctor> doctorList = new List<Doctor>();
 
@@ -91,7 +95,7 @@ namespace DAL
                         SqlDataReader rdr = await command.ExecuteReaderAsync();
                         while (rdr.Read())
                         {
-                            Doctor dr = new Doctor();                            
+                             Doctor dr = new Doctor();                            
                             dr.FirstName= (string)rdr["FirstName"];
                             dr.LastName= (string)rdr["LastName"];
                             dr.FullName= (string)rdr["FullName"];
@@ -108,6 +112,44 @@ namespace DAL
             }
             return doctorList;
         }
+        /// <summary>
+        /// Gets the List of All Appointments From The Database
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Appointment>> GetAllAppointments()
+        {
+            List<Appointment> appointlist = new List<Appointment>();
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    con.Open();
+                    using (var command = new SqlCommand("dbo.GetAllAppointments", con))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        SqlDataReader rdr = await command.ExecuteReaderAsync();
+                        while (rdr.Read())
+                        {
+                            Appointment apt = new Appointment();
+                            apt.DoctorFullName = (string)rdr["DoctorFullName"];
+                            apt.PetName = (string)rdr["PetName"];
+                            apt.StatusName= (string)rdr["StatusName"];
+                            apt.Id = Convert.ToInt32(rdr["Id"]);
+                            appointlist.Add(apt);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return appointlist;
+        }
+
 
     }
+
 }

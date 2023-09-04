@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Model.Appointment>
 
 @{
-    ViewData["Title"] = "AllAppointments";
+    ViewData["Title"] = "Appointment List";
 }
 
-<h1>AllAppointments</h1>
+<h1>Appointment List</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -13,32 +13,18 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
+               Id
+            </th>            
             <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DoctorId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PetTypeId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StatusId)
+                @Html.DisplayNameFor(model => model.DoctorName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PetName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DoctorName)
+                @Html.DisplayNameFor(model => model.StatusName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PetBreed)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PetType)
-            </th>
+            
             <th></th>
         </tr>
     </thead>

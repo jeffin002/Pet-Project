@@ -61,3 +61,11 @@ create table dbo.Appointment
 )
 alter table dbo.appointment
 add StatusId int not null constraint fk_appointment_Statusid foreign key references dbo.Status(Id)
+
+
+
+alter table appointment
+alter column UpdatedDateTime datetime not null
+
+update Appointment
+set UpdatedDateTime = CreatedDtTm

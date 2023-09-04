@@ -143,6 +143,22 @@ namespace Web.Mvc.Controllers
                 return StatusCode(500, "An error occurred while fetching doctors.");
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Appointment>>> GetAllAppointments()
+        {
+            try
+            {
+                AppointmentAccess apt = new AppointmentAccess(_config);
+                List<Appointment> appointmentlist = await apt.GetAllAppointments();
+                return View("AppointmentList", appointmentlist);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here
+                return StatusCode(500, "An error occurred while fetching doctors.");
+            }
+        }
     }
 }
 
