@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Reflection;
+using System.Security.Policy;
 using System.Threading.Tasks;
 //using System.Web.Mvc;
 using Web.Mvc.Models;
@@ -159,6 +160,65 @@ namespace Web.Mvc.Controllers
                 return StatusCode(500, "An error occurred while fetching doctors.");
             }
         }
+
+
+        //[HttpPost]        
+        //public IActionResult DeleteAppointment([FromBody] int appointmentId)
+        //{
+        //    try
+        //    {
+        //        // Create an Appointment object with the ID to match the method's parameter.
+        //        Appointment appointmentToDelete = new Appointment { DeleteId = appointmentId };
+
+        //        // Call the DeleteAppointment method to delete the appointment.
+        //        .DeleteAppointment(appointmentToDelete);
+
+        //        return Ok("Appointment deleted successfully.");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle and log the exception as needed.
+
+        //    }
+        //}
+
+        [HttpDelete]
+        public ActionResult Delete(int deleteId)
+        {
+            try
+            {
+
+                AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
+                appointmentAccess.DeleteAppointment(deleteId);
+
+                // Assuming the operation was successful, return a JSON success response
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during the deletion process
+                // You can log the error or return an error response as needed
+                return Json(new { success = false, errorMessage = ex.Message });
+            }
+        }
+        [HttpGet]
+        public async Task<ActionResult<Appointment>> GetAppointmentById(int id )
+        {
+            try
+            {
+                AppointmentAccess apt = new AppointmentAccess(_config);
+                Appointment appointment = await apt.GetAppointmentById(id);
+                return View("editappointment", appointment);
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here
+                return StatusCode(500, "An error occurred while fetching doctors.");
+            }
+        }
+
+
+
     }
 }
 

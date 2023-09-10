@@ -228,10 +228,32 @@
                 alert(response.responseText);
             }
         });
-    } 
-    $('.lnk-delete').click(function () {        
-        var appointmentId = $(this).data("id");
-        console.log(appointmentId);
-    });
+    }
+    $('.lnk-delete').on('click', function (event) {
+        event.preventDefault();
+        var appointmentId = $(this).data('id');
+        $.ajax({
+            type: 'Delete',
+            url: '/Appointment/Delete',
+            data: {
+                deleteId: appointmentId
+            },
+            success: function (response) {
+                if (response.success) {
 
-});
+                    console.log('Appointment deleted successfully');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 100);
+                } else {
+
+                    console.log('Error: ' + response.errorMessage);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+
+                console.log('AJAX Error: ' + errorThrown);
+            }
+        });
+    });
+ });

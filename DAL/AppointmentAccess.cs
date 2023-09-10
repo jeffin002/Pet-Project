@@ -136,6 +136,7 @@ namespace DAL
                             apt.PetName = (string)rdr["PetName"];
                             apt.StatusName= (string)rdr["StatusName"];
                             apt.Id = Convert.ToInt32(rdr["Id"]);
+                            apt.UpdatedDateTime = (DateTime)rdr["UpdatedDateTime"];
                             appointlist.Add(apt);
                         }
                     }
@@ -148,6 +149,56 @@ namespace DAL
             }
             return appointlist;
         }
+        public void DeleteAppointment(int deleteId)
+        {
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand objSqlCommand = new SqlCommand("dbo.DeleteAppointment", con);
+                    objSqlCommand.CommandType = CommandType.StoredProcedure;
+                    objSqlCommand.Parameters.AddWithValue("@DeleteId", deleteId);                    
+                    con.Open();
+                    objSqlCommand.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+        public async Task<Appointment> GetAppointmentById(int id)
+        {
+            Appointment apt = new Appointment();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand objSqlCommand = new SqlCommand("dbo.GetAppointmentById", con);
+                    objSqlCommand.CommandType = CommandType.StoredProcedure;
+                    objSqlCommand.Parameters.AddWithValue("@Id", id);
+                    con.Open();
+                    SqlDataReader rdr = await objSqlCommand.ExecuteReaderAsync();
+                    while (rdr.Read())
+                    {                       
+                        apt.Description= (string)rdr["Description"];                        
+                        apt.Id = Convert.ToInt32(rdr["Id"]);
+                        apt.DoctorId= Convert.ToInt32(rdr["DoctorId"]);
+                        apt.PetId = Convert.ToInt32(rdr["PetId"]);
+                        apt.BreedId = Convert.ToInt32(rdr["BreedId"]);
+                        apt.PetTypeId = Convert.ToInt32(rdr["PetTypeId"]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return apt;
+        }
+
 
 
     }

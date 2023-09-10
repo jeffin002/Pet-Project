@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>
@@ -27,12 +27,15 @@
             <th>
                 @Html.DisplayNameFor(model => model.UpdatedDateTime)
             </th>            
-            <th></th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
+            var statusName = item.StatusName;
+            <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
             </td>  
@@ -41,17 +44,23 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PetName)
-            </td>            
-            <td>
+            </td>  
+            
+                <td class="@(statusName == "Cancelled"?"field-validation-error":" ")">
+
                 @Html.DisplayFor(modelItem => item.StatusName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.UpdatedDateTime)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |      
-               
-                <a href="#" class="lnk-delete" data-id="@item.Id">Delete</a>
+                    @Html.ActionLink("Edit", "GetAppointmentById", new { id=item.Id }) |   &nbsp;
+
+                    <a href="#" class="lnk-delete" data-id="@item.Id">Delete</a> &nbsp;|&nbsp;
+
+                    <a href="#" class="lnk-cancel" data-id="@item.Id">Cancel</a> &nbsp;|&nbsp;
+
+                    <a href="#" class="lnk-complete" data-id="@item.Id">Complete</a> 
             </td>
         </tr>
 }
