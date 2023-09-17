@@ -66,7 +66,7 @@
         $.ajax({
             type: "POST",
             url: "/doctor/index",
-            data: JSON.stringify(doctor),
+            data: doctorJson,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
 
@@ -249,6 +249,32 @@
 
                     console.log('Error: ' + response.errorMessage);
                 }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+
+                console.log('AJAX Error: ' + errorThrown);
+            }
+        });
+    });
+
+    $('.lnk-edit').on('click', function (event) {
+        event.preventDefault();
+        var appointmentId = $(this).data('id');
+        console.log(appointmentId);
+        $.ajax({
+            type: 'Get',
+            url: `/Appointment/Index?id=${appointmentId}`,            
+            success: function (response) {
+                console.log(response);
+
+                if (response != null) {                    
+                  $('#description').val(response.description);
+                  $('#petname').val(response.petName);
+                                       
+                    
+                }
+                window.location.href = '/Appointment/Index';
+               
             },
             error: function (xhr, textStatus, errorThrown) {
 

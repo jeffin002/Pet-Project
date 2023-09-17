@@ -22,8 +22,6 @@ namespace DAL
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
-
-
                 try
                 {
                     SqlCommand objSqlCommand = new SqlCommand("dbo.CreateDoctor", con);

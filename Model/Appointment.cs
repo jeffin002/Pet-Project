@@ -4,12 +4,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Model
 {
     public class Appointment
     {
         public int Id { get; set; }
+        public int SelectedDoctorId { get; set; }
         public int PetId { get; set; }
         public string Description { get; set; }
         public int DoctorId { get; set; }
@@ -32,6 +34,8 @@ namespace Model
 
         [DisplayName("Updated On")]
         public DateTime UpdatedDateTime { get; set;}
-        
+        public IEnumerable<SelectListItem> DoctorList { get; set; }
+        public List<Doctor> EditList { get; set; }
+
     }
 }

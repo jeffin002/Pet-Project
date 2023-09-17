@@ -69,3 +69,79 @@ alter column UpdatedDateTime datetime not null
 
 update Appointment
 set UpdatedDateTime = CreatedDtTm
+
+--Create Doctor
+--CREATE PROCEDURE dbo.CreateDoctor 
+--    @FirstName VARCHAR(100),
+--    @LastName VARCHAR(100),
+--    @Email VARCHAR(100),
+--    @Description VARCHAR(100)
+--AS
+--BEGIN
+--    INSERT INTO Doctor (FirstName, LastName, Email, Description)
+--    VALUES (@FirstName, @LastName, @Email, @Description);
+--END;
+
+
+-->
+--alter procedure dbo.GetAppointmentById    
+--(    
+-- @Id int    
+--)    
+--as    
+--begin    
+--select     
+-- apt.Id,    
+-- apt.DoctorId,    
+-- apt.Description,
+-- dr.FirstName+' '+dr.LastName as FullName,
+-- pt.Name as petname  
+--from     
+-- dbo.Appointment as apt    
+-- inner join dbo.Pet as pt on    
+--  pt.Id = apt.PetId 
+--  inner join dbo.Doctor as dr on
+--  dr.Id = apt.DoctorId
+--where     
+-- apt.Id = @Id;    
+--end
+
+
+--CREATE procedure DeleteAppointment(@DeleteId int)    
+--as    
+--begin    
+--delete from Appointment where Id = @DeleteId    
+--end
+
+
+--CREATE procedure dbo.GetAllAppointment  
+--as  
+--begin  
+--select   
+-- apt.Id,  
+-- dtr.FirstName +' '+ dtr.LastName as DoctorFullName,  
+-- pt.Name as PetName,  
+-- st.Name as StatusName,  
+-- apt.CreatedDtTm,  
+-- apt.UpdatedDateTime  
+--from  
+-- dbo.Appointment as apt  
+-- inner join dbo.Doctor as dtr on  
+--  dtr.Id = apt.DoctorId  
+-- inner join  dbo.Pet as pt on  
+--  pt.Id = apt.PetId  
+-- inner join dbo.Status as st on  
+--  st.Id = apt.StatusId  
+  
+--order by  
+-- apt.UpdatedDateTime  
+--end
+
+
+--CREATE procedure getalldoctors    
+--as    
+--begin    
+--select Id,FirstName,LastName,FirstName+' '+ LastName as FullName from Doctor    
+--order by   FullName  
+--end  
+  

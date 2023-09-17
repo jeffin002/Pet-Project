@@ -56,7 +56,7 @@ namespace DAL
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
                     con.Open();
-                    using (var command = new SqlCommand("dbo.GetBreedTypesByPetTypeId", con))
+                    using (SqlCommand command = new SqlCommand("dbo.GetBreedTypesByPetTypeId", con))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@Id", petTypeId);
@@ -89,7 +89,7 @@ namespace DAL
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
                     con.Open();
-                    using (var command = new SqlCommand("dbo.GetAllDoctors", con))
+                    using (SqlCommand command = new SqlCommand("dbo.GetAllDoctors", con))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         SqlDataReader rdr = await command.ExecuteReaderAsync();
@@ -125,7 +125,7 @@ namespace DAL
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
                     con.Open();
-                    using (var command = new SqlCommand("dbo.GetAllAppointments", con))
+                    using (SqlCommand command = new SqlCommand("dbo.GetAllAppointments", con))
                     {
                         command.CommandType = CommandType.StoredProcedure;
                         SqlDataReader rdr = await command.ExecuteReaderAsync();
@@ -182,12 +182,11 @@ namespace DAL
                     SqlDataReader rdr = await objSqlCommand.ExecuteReaderAsync();
                     while (rdr.Read())
                     {                       
-                        apt.Description= (string)rdr["Description"];                        
+                        apt.Description = (string)rdr["Description"];
+                        apt.PetName = (string)rdr["PetName"];
+                        apt.DoctorFullName = (string)rdr["FullName"];
                         apt.Id = Convert.ToInt32(rdr["Id"]);
-                        apt.DoctorId= Convert.ToInt32(rdr["DoctorId"]);
-                        apt.PetId = Convert.ToInt32(rdr["PetId"]);
-                        apt.BreedId = Convert.ToInt32(rdr["BreedId"]);
-                        apt.PetTypeId = Convert.ToInt32(rdr["PetTypeId"]);
+                        apt.DoctorId= Convert.ToInt32(rdr["DoctorId"]);                        
                     }
                 }
             }

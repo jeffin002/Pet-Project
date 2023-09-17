@@ -54,7 +54,8 @@
                 @Html.DisplayFor(modelItem => item.UpdatedDateTime)
             </td>
             <td>
-                    @Html.ActionLink("Edit", "GetAppointmentById", new { id=item.Id }) |   &nbsp;
+                    @Html.ActionLink("Edit","Index","Appointment",new{id = item.Id}) &nbsp|   &nbsp;
+                  @* <a href="Index" class="lnk-edit" data-id="@item.Id">Edit</a> &nbsp|   &nbsp;*@
 
                     <a href="#" class="lnk-delete" data-id="@item.Id">Delete</a> &nbsp;|&nbsp;
 

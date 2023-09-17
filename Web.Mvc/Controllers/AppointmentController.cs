@@ -16,6 +16,7 @@ using System.Net;
 using System.Reflection;
 using System.Security.Policy;
 using System.Threading.Tasks;
+using Web.Mvc.Extentions;
 //using System.Web.Mvc;
 using Web.Mvc.Models;
 
@@ -34,11 +35,20 @@ namespace Web.Mvc.Controllers
             _config=config;
         }
 
-        [HttpGet]        
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index([FromRoute] int? id)
         {
-            Appointment appointment = new Appointment();
-            return View("appointment", appointment);
+            Appointment viewModel = new Appointment();
+            if (id > 0)
+            {                               
+                AppointmentAccess aa = new AppointmentAccess(_config);
+                viewModel = await aa.GetAppointmentById(id.Value);
+                var doctorList = await aa.AllDoctorList();
+                viewModel.DoctorList = doctorList.ToViewModel();
+                viewModel.SelectedDoctorId = viewModel.DoctorId;
+                                
+            }
+            return View("appointment", viewModel);            
         }
 
         //[HttpPost]
@@ -215,6 +225,12 @@ namespace Web.Mvc.Controllers
                 // Handle exceptions here
                 return StatusCode(500, "An error occurred while fetching doctors.");
             }
+        }
+        [HttpGet]
+        public IActionResult EditAppointment()
+        {
+            
+            return View("appointment"); 
         }
 
 

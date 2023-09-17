@@ -35,7 +35,7 @@ namespace Web.Mvc.Controllers
             {
                 DoctorAccess doctorAccess = new DoctorAccess(_config);
                 doctorAccess.AddDoctor(doctor);
-                return Json(new { message = "success", firstName = "jeffin" });
+                return Json(new { message = "success",firstName = doctor.FirstName });
             }
             catch (System.Exception)
             {
