@@ -171,7 +171,7 @@ namespace Web.Mvc.Controllers
             try
             {
                 AppointmentAccess apt = new AppointmentAccess(_config);
-                List<Appointment> appointmentlist = await apt.GetAllAppointments();
+                List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper();
                 return View("AppointmentList", appointmentlist);
             }
             catch (Exception ex)

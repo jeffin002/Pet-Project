@@ -222,6 +222,31 @@ namespace DAL
             }
         }
 
+        public async Task<List<Appointment>> GetAllAppointmentsDapper()
+        {
+            IEnumerable<Appointment> appointlist = new List<Appointment>();
+
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+
+                    appointlist = await connection.QueryAsync<Appointment>
+                        (
+                         "GetAllAppointments",commandType: System.Data.CommandType.StoredProcedure
+                        );
+                    
+                }               
+
+            }
+            catch (Exception ex)
+            {
+
+            }            
+            return appointlist.ToList();
+        }
+
 
     }
 
