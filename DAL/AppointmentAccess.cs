@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IO.Compression;
+using Dapper;
 
 namespace DAL
 {
@@ -198,6 +199,28 @@ namespace DAL
             return apt;
         }
 
+        public async Task UpdateAppointmentById(Appointment appointment)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    var parameters = new { Id = appointment.Id,
+                                           DoctorId = appointment.DoctorId,
+                                           Description = appointment.Description };
+
+                    await connection.ExecuteAsync
+                        (
+                         "UpdateAppointmentById", parameters, commandType: System.Data.CommandType.StoredProcedure
+                        );
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
 
 
     }

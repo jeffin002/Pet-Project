@@ -123,13 +123,23 @@ namespace Web.Mvc.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateAppointment([FromBody] Appointment request)
+        public async Task<IActionResult> CreateAppointment([FromBody] Appointment request)
         {
+            
             try
             {
-                request.StatusId=(int)StatusEnum.Scheduled;
                 AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
-                appointmentAccess.AddAppointment(request);
+
+                if (request.Id > 0)
+                {
+                   await appointmentAccess.UpdateAppointmentById(request);
+                }
+                else 
+                {
+                    request.StatusId = (int)StatusEnum.Scheduled;
+                    appointmentAccess.AddAppointment(request);
+                }
+                
                 return Json(new { message = "success"});
             }
             catch (System.Exception)

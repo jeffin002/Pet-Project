@@ -12,5 +12,5 @@ namespace Model
         public string Name { get; set; }
         public int PetTypeId { get; set; }
         
-    }
+    }    
 }

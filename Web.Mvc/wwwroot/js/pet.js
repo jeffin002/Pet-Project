@@ -126,6 +126,8 @@
     })
     $('#btncreate').click(function (event) {
 
+        const aptId = parseInt($('#hdn-apoointment-id').val());
+        const isUpdate = aptId > 0;
         event.preventDefault();
         var petname = $('#petname').val();
         var pettypeid = $('#petTypeSelect').val();
@@ -135,43 +137,48 @@
         var doctorid = $('#ddl-doctor').val();
         console.log('doctorid', doctorid);
         var description = $('#description').val();
-        var isformvalid = true;
-        clearPreValidationErrors();
-        if (!petname) {
-            console.log('inside petname:', petname);
-            $('.spnpetname').text('petname is Required!').addClass('field-validation-error').show();
-            isformvalid = false;
-        }
-        if (!pettypeid || pettypeid== 0 ) {
-            console.log('inside pettypeid:', pettypeid);
-            $('.spnpetid').text('pettype is Required!').addClass('field-validation-error').show();
-            isformvalid = false;
-        }
-        
-        if (!doctorid) {
-            console.log('inside doctorid:', doctorid);
-            $('.spndoctorname').text('doctorname is Required!').addClass('field-validation-error').show();
-            isformvalid = false;
-        }
-        if (!description) {
-            console.log('inside description:', description);
-            $('.spndescription').text('description is Required!').addClass('field-validation-error').show();
-            isformvalid = false;
-        }
-        if (!petbreedtypeid) {
-            console.log('inside petbreed:', petbreed);
-            $('.spnpetbreed').text('petbreed is Required!').addClass('field-validation-error').show();
-            isformvalid = false;
-        }
-        if (!isformvalid) {
-            return false; 
-        }        
-        function clearPreValidationErrors() {
-            $('.spnpetname, .spnpetid, .spnpetbreed, .spndoctorname, .spndescription').text('').removeClass('field-validation-error').hide();
-        }
+        if (!isUpdate) {
+            var isformvalid = true;
+            clearPreValidationErrors();
+            if (!petname) {
+                console.log('inside petname:', petname);
+                $('.spnpetname').text('petname is Required!').addClass('field-validation-error').show();
+                isformvalid = false;
+            }
+            if (!pettypeid || pettypeid == 0) {
+                console.log('inside pettypeid:', pettypeid);
+                $('.spnpetid').text('pettype is Required!').addClass('field-validation-error').show();
+                isformvalid = false;
+            }
 
-
+            if (!doctorid) {
+                console.log('inside doctorid:', doctorid);
+                $('.spndoctorname').text('doctorname is Required!').addClass('field-validation-error').show();
+                isformvalid = false;
+            }
+            if (!description) {
+                console.log('inside description:', description);
+                $('.spndescription').text('description is Required!').addClass('field-validation-error').show();
+                isformvalid = false;
+            }
+            if (!petbreedtypeid) {
+                console.log('inside petbreedtypeid:', petbreedtypeid);
+                $('.spnpetbreed').text('petbreed is Required!').addClass('field-validation-error').show();
+                isformvalid = false;
+            }
+            if (!isformvalid) {
+                return false;
+            }
+        }
+        else {
+            if (!description) {
+                console.log('inside description:', description);
+                $('.spndescription').text('description is Required!').addClass('field-validation-error').show();
+                isformvalid = false;
+            }
+        }
         var appointment = {
+            id: aptId,
             petName: petname,
             petTypeId: pettypeid,
             breedId: petbreedtypeid,
@@ -184,11 +191,12 @@
 
         $.ajax({
             type: "POST",
-            url: "/Appointment/CreateAppointment",
+            url: "Appointment/CreateAppointment",
             data: appointmentJson,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
+                console.log(response);
                 window.location.href = 'Appointment/GetAllAppointments';
             },
             failure: function (response) {
@@ -199,6 +207,9 @@
                 alert(response.responseText);
             }
         });
+        function clearPreValidationErrors() {
+            $('.spnpetname, .spnpetid, .spnpetbreed, .spndoctorname, .spndescription').text('').removeClass('field-validation-error').hide();
+        }
     });
     function getAllDoctors() {
         $.ajax({

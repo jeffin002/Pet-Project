@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Mvc;
+
 
 namespace Model
 {
@@ -34,7 +35,8 @@ namespace Model
 
         [DisplayName("Updated On")]
         public DateTime UpdatedDateTime { get; set;}
-        public IEnumerable<SelectListItem> DoctorList { get; set; }
+        public IEnumerable<SelectListItem> DoctorList { get; set; }  
+
         public List<Doctor> EditList { get; set; }
 
     }
