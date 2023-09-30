@@ -45,9 +45,9 @@
 else
 {
 
-<h4> Create Appointment</h4>
-<hr />
-<div class="row">
+ <h4> Create Appointment</h4>
+ <hr />
+ <div class="row">
     <div class="col-md-4">
         <form asp-action="Index">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -95,12 +95,12 @@ else
            
         </form>
     </div>
-</div>
+ </div>
  
 }
 
 <div class="form-group margin-30">
-    <input type="submit" id="btncreate" value="@(Model.Id > 0 ? " Update" : "Create")" class="btn btn-primary" />
+    <input type="submit" id="btncreate" value="@(Model.Id > 0 ? "Update" : "Create")" class="btn btn-primary" />
 </div>
 
 

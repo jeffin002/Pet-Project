@@ -1,6 +1,10 @@
 ﻿$(document).ready(function () {
-   
-    getAllDoctors();
+
+    const aptId = parseInt($('#hdn-apoointment-id').val());
+    if (aptId <= 0) {
+        getAllDoctors();
+    }
+    
     $('#btnsubmit').click(function (event) {
         event.preventDefault();
         var firstName = $('#firstname').val();
@@ -126,7 +130,7 @@
     })
     $('#btncreate').click(function (event) {
 
-        const aptId = parseInt($('#hdn-apoointment-id').val());
+        
         const isUpdate = aptId > 0;
         event.preventDefault();
         var petname = $('#petname').val();
@@ -191,13 +195,13 @@
 
         $.ajax({
             type: "POST",
-            url: "Appointment/CreateAppointment",
+            url: "/Appointment/CreateAppointment",
             data: appointmentJson,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (response) {
                 console.log(response);
-                window.location.href = 'Appointment/GetAllAppointments';
+                window.location.href = '/Appointment/GetAllAppointments';
             },
             failure: function (response) {
                 alert(response.responseText);
