@@ -12,6 +12,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Security.Policy;
@@ -166,7 +167,7 @@ namespace Web.Mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Appointment>>> GetAllAppointments()
+        public async Task<ActionResult<AppointmentListContainer>> GetAllAppointments([FromQuery]AppointmentsSearchParm request)
         {
             try
             {
@@ -174,7 +175,16 @@ namespace Web.Mvc.Controllers
                 //p.CurrentPage = 2;
                 AppointmentAccess apt = new AppointmentAccess(_config);
                 List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper();
-                return View("AppointmentList", appointmentlist);
+                AppointmentListContainer container = new AppointmentListContainer();
+                container.AppointmentList = appointmentlist;
+                container.PagingInfo = new Pager(appointmentlist.First().TotalRecords,request.CurrentPage,request.PageSize);               
+                return View("AppointmentList", container);
+            }
+            catch (DivideByZeroException ex)
+            {
+                // Handle exceptions here
+                _logger.LogError(ex, "error occured while retreving appointment list");
+                return StatusCode(500, "An error occurred while fetching doctors.");
             }
             catch (Exception ex)
             {

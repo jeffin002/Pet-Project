@@ -1,5 +1,4 @@
-﻿@model IEnumerable<Model.Appointment>
-
+﻿@model AppointmentListContainer
 @{
     ViewData["Title"] = "Appointment List";
 }
@@ -26,7 +25,12 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<div class="custom-paging">
+    @{
+        await Html.RenderPartialAsync("_Pagination",Model.PagingInfo);
+    }
 
+</div>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -34,16 +38,16 @@
                Id
             </th>            
             <th>
-                @Html.DisplayNameFor(model => model.DoctorFullName)
+                @Html.DisplayNameFor(model => model.AppointmentList.First().DoctorFullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PetName)
+                @Html.DisplayNameFor(model => model.AppointmentList.First().PetName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.StatusName)
+                @Html.DisplayNameFor(model => model.AppointmentList.First().StatusName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UpdatedDateTime)
+                @Html.DisplayNameFor(model => model.AppointmentList.First().UpdatedDateTime)
             </th>            
             <th>
                 Actions
@@ -51,7 +55,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.AppointmentList) {
             var statusName = item.StatusName;
             <tr>
             <td>

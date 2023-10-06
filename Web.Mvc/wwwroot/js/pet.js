@@ -201,7 +201,7 @@
             dataType: "json",
             success: function (response) {
                 console.log(response);
-                window.location.href = '/Appointment/GetAllAppointments';
+                window.location.href = '/Appointment/GetAllAppointments?currentPage=1&pageSize=10';
             },
             failure: function (response) {
                 alert(response.responseText);

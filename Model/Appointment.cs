@@ -15,6 +15,7 @@ namespace Model
         public int SelectedDoctorId { get; set; }
         public int PetId { get; set; }
         public string Description { get; set; }
+        public int TotalRecords { get; set; }
         public int DoctorId { get; set; }
         public int PetTypeId { get; set; }
         public int StatusId { get; set; }
@@ -38,6 +39,8 @@ namespace Model
         public IEnumerable<SelectListItem> DoctorList { get; set; }  
 
         public List<Doctor> EditList { get; set; }
+
+        
 
     }
 }
