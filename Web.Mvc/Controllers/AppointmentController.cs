@@ -170,6 +170,8 @@ namespace Web.Mvc.Controllers
         {
             try
             {
+                //Pager p = new Pager(35,1,10);
+                //p.CurrentPage = 2;
                 AppointmentAccess apt = new AppointmentAccess(_config);
                 List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper();
                 return View("AppointmentList", appointmentlist);

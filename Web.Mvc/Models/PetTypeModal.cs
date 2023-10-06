@@ -4,5 +4,4 @@ namespace Web.Mvc.Models
     {
         public int PetTypeValue { get; set; }
     }
-
 }

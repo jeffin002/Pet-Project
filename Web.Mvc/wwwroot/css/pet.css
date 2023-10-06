@@ -22,18 +22,67 @@
         padding: 10px; /* Adjust padding as needed */
         border: 1px solid #ccc; /* Add a border or customize as needed */
         background-color: #fff; /* Customize background color */
-        width: 100%; /* Ensure the select takes up the full width */
+        width: 120%; /* Ensure the select takes up the full width */
+        max-height: 200px; /* Adjust the value based on your needs */
+        overflow-y: auto;
     }
 
     /* Add custom arrow using a pseudo-element */
     .select-wrapper::after {
         content: "\25BC"; /* Unicode character for down arrow */
         position: absolute;
-        top: 50%;
-        right: 10px; /* Adjust the distance of the arrow from the right */
+        top: 53%;
+        right: 5px; /* Adjust the distance of the arrow from the right */
         transform: translateY(-50%);
         pointer-events: none; /* Ensure the arrow doesn't interfere with select clicks */
         font-size: 16px; /* Adjust font size as needed */
         color: #555; /* Customize arrow color */
     }
 
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.appointment-heading {
+    margin: 0;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+}
+
+    .search-box a {
+        margin-right: 10px; /* Adjust the margin as needed */
+    }
+
+.custom-select {
+    position: relative;
+    display: inline-block;
+}
+
+    .custom-select select {
+        appearance: none; /* Remove default appearance */
+        -webkit-appearance: none; /* For older versions of Chrome/Safari */
+        -moz-appearance: none; /* For older versions of Firefox */
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+.arrow-down {
+    position: absolute;
+    top: 50%;
+    right: 8px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #555;
+    cursor: pointer;
+}
