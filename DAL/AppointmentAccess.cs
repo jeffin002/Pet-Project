@@ -9,15 +9,19 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.IO.Compression;
 using Dapper;
+using Microsoft.Extensions.Logging;
 
 namespace DAL
 {
     public class AppointmentAccess
     {
         private readonly string _connectionString;
-        public AppointmentAccess(IConfiguration config)
+        private ILogger<AppointmentAccess> _logger;
+
+        public AppointmentAccess(IConfiguration config,ILogger<AppointmentAccess> logger)
         {
             _connectionString = config.GetConnectionString("MyConnection");
+            _logger = logger;
         }
 
         public void AddAppointment(Appointment appointment)
@@ -244,9 +248,13 @@ namespace DAL
                 }               
 
             }
+            catch (SqlException Sqlex)
+            {
+                _logger.LogError(Sqlex, "Error Occured While Calling the GetAllAppointments Method");
+            }
             catch (Exception ex)
             {
-                
+                _logger.LogError(ex,"Error Occured While Calling the GetAllAppointments Method");
             }            
             return appointlist.ToList();
         }

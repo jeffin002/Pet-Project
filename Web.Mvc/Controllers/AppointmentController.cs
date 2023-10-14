@@ -27,13 +27,15 @@ namespace Web.Mvc.Controllers
     {
         private readonly ILogger<AppointmentController> _logger;
         private readonly IConfiguration _config;
+        private ILoggerFactory _factory;
         private string _connectionString;
         private SqlConnection connection;
 
-        public AppointmentController(ILogger<AppointmentController> logger, IConfiguration config)
+        public AppointmentController(ILogger<AppointmentController> logger, IConfiguration config,ILoggerFactory factory)
         {
             _logger = logger;
             _config=config;
+            _factory = factory;
         }
 
         [HttpGet]
@@ -42,7 +44,7 @@ namespace Web.Mvc.Controllers
             Appointment viewModel = new Appointment();
             if (id > 0)
             {                               
-                AppointmentAccess aa = new AppointmentAccess(_config);
+                AppointmentAccess aa = new AppointmentAccess(_config,_factory.CreateLogger<AppointmentAccess>());
                 viewModel = await aa.GetAppointmentById(id.Value);
                 var doctorList = await aa.AllDoctorList();
                 viewModel.DoctorList = doctorList.ToViewModel();
@@ -117,7 +119,7 @@ namespace Web.Mvc.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBreedsByPetTypeId([FromQuery]int petTypeId)
         {
-            AppointmentAccess a = new AppointmentAccess(_config);
+            AppointmentAccess a = new AppointmentAccess(_config, _factory.CreateLogger<AppointmentAccess>());
 
             List<Breed> breedList = await a.GetBreedsByPetTypeId(petTypeId);
             return Json(breedList);
@@ -129,7 +131,7 @@ namespace Web.Mvc.Controllers
             
             try
             {
-                AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
+                AppointmentAccess appointmentAccess = new AppointmentAccess(_config, _factory.CreateLogger<AppointmentAccess>());
 
                 if (request.Id > 0)
                 {
@@ -155,7 +157,7 @@ namespace Web.Mvc.Controllers
         {
             try
             {
-                AppointmentAccess a = new AppointmentAccess(_config);
+                AppointmentAccess a = new AppointmentAccess(_config, _factory.CreateLogger<AppointmentAccess>());
                 List<Doctor> doctorList = await a.AllDoctorList();
                 return Ok(doctorList);
             }
@@ -173,7 +175,7 @@ namespace Web.Mvc.Controllers
             {
                 //Pager p = new Pager(35,1,10);
                 //p.CurrentPage = 2;
-                AppointmentAccess apt = new AppointmentAccess(_config);
+                AppointmentAccess apt = new AppointmentAccess(_config, _factory.CreateLogger<AppointmentAccess>());
                 List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper(request.CurrentPage,request.PageSize);
                 AppointmentListContainer container = new AppointmentListContainer();
                 container.AppointmentList = appointmentlist;
@@ -220,7 +222,7 @@ namespace Web.Mvc.Controllers
             try
             {
 
-                AppointmentAccess appointmentAccess = new AppointmentAccess(_config);
+                AppointmentAccess appointmentAccess = new AppointmentAccess(_config, _factory.CreateLogger<AppointmentAccess>());
                 appointmentAccess.DeleteAppointment(deleteId);
 
                 // Assuming the operation was successful, return a JSON success response
@@ -238,7 +240,7 @@ namespace Web.Mvc.Controllers
         {
             try
             {
-                AppointmentAccess apt = new AppointmentAccess(_config);
+                AppointmentAccess apt = new AppointmentAccess(_config, _factory.CreateLogger<AppointmentAccess>());
                 Appointment appointment = await apt.GetAppointmentById(id);
                 return View("editappointment", appointment);
             }
