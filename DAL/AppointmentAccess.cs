@@ -222,11 +222,9 @@ namespace DAL
             }
         }
 
-        public async Task<List<Appointment>> GetAllAppointmentsDapper()
+        public async Task<List<Appointment>> GetAllAppointmentsDapper(int currentPage,int pageSize)
         {
             IEnumerable<Appointment> appointlist = new List<Appointment>();
-
-
             try
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -234,7 +232,13 @@ namespace DAL
 
                     appointlist = await connection.QueryAsync<Appointment>
                         (
-                         "GetAllAppointments",commandType: System.Data.CommandType.StoredProcedure
+                         "GetAllAppointments",
+                         new
+                         {
+                             currentPage,
+                             pageSize
+                         },
+                         commandType: System.Data.CommandType.StoredProcedure
                         );
                     
                 }               
@@ -242,7 +246,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-
+                
             }            
             return appointlist.ToList();
         }

@@ -297,4 +297,35 @@
             }
         });
     });
+
+    $('.lnk-pager').on('click', function (event) {
+        event.preventDefault();
+        var currentPage = $(this).data('currentpage');
+        //var currentPagestr = $(this).attr('data-currentpage');
+
+        //console.log(`type of currentpage = ${typeof currentPage},${typeof currentPagestr}`);
+
+        window.location.href = `/Appointment/GetAllAppointments?currentPage=${currentPage}&pageSize=10`;
+        //$.ajax({
+        //    type: 'Get',
+        //    url: `/Appointment/GetAllAppointments ${currentPage}`,
+        //    success: function (response) {
+        //        console.log(response);
+
+        //        if (response != null) {
+        //            $('#description').val(response.description);
+        //            $('#petname').val(response.petName);
+
+
+        //        }
+        //        window.location.href = '/Appointment/Index';
+
+        //    },
+        //    error: function (xhr, textStatus, errorThrown) {
+
+        //        console.log('AJAX Error: ' + errorThrown);
+        //    }
+        //});
+    });
+
  });

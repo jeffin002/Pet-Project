@@ -174,7 +174,7 @@ namespace Web.Mvc.Controllers
                 //Pager p = new Pager(35,1,10);
                 //p.CurrentPage = 2;
                 AppointmentAccess apt = new AppointmentAccess(_config);
-                List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper();
+                List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper(request.CurrentPage,request.PageSize);
                 AppointmentListContainer container = new AppointmentListContainer();
                 container.AppointmentList = appointmentlist;
                 container.PagingInfo = new Pager(appointmentlist.First().TotalRecords,request.CurrentPage,request.PageSize);               
