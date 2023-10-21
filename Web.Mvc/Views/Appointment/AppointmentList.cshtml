@@ -5,21 +5,9 @@
 
 <div class="header-container">
     <h1>Appointment List</h1>
-    <div class="search-box">
-        <div class="form-group">
-            <label for="searchInput">Search: </label>
-            <input type="text" id="searchInput" class="form-control" placeholder="Search By Status">
-        </div>
-        <button type="button" id="searchButton" class="btn btn-primary">Search</button>
-    </div>
-    <div class="dropdown select-wrapper">
-        <select id="statusDropdown" class="form-control">
-            <option value="0">All</option>
-            <option value="1">Scheduled</option>
-            <option value="2">Cancelled</option>            
-            <option value="3">Closed</option>
-        </select>
-    </div>
+    @{
+        await Html.RenderPartialAsync("_Search");
+    }
 </div>
 
 <p>

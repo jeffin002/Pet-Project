@@ -144,4 +144,54 @@ set UpdatedDateTime = CreatedDtTm
 --select Id,FirstName,LastName,FirstName+' '+ LastName as FullName from Doctor    
 --order by   FullName  
 --end  
-  
+  alter procedure dbo.GetAllAppointments (
+	@currentPage int = 1,
+	@pageSize int = 10,
+	@test varchar(100) = null,
+	@doctorId int = null,
+	@statusId int = null
+	)
+as
+begin
+	declare @totalRecords int
+	declare @tempTableAppointments table (
+		Id int,
+		DoctorFullName varchar(100),
+		PetName varchar(100),
+		StatusName varchar(50),
+		CreatedDtTm datetime,
+		UpdatedDateTime datetime
+		)
+
+	insert into @tempTableAppointments
+	select apt.Id,
+		dtr.FirstName + ' ' + dtr.LastName as DoctorFullName,
+		pt.Name as PetName,
+		st.Name as StatusName,
+		apt.CreatedDtTm,
+		apt.UpdatedDateTime
+	from dbo.Appointment as apt
+	inner join dbo.Doctor as dtr on dtr.Id = apt.DoctorId
+	inner join dbo.Pet as pt on pt.Id = apt.PetId
+	inner join dbo.status as st on st.Id = apt.StatusId
+	where (
+			@doctorId is null
+			or apt.DoctorId = @doctorId
+			)
+		and (
+			@statusId is null
+			or apt.StatusId = @statusId
+			)
+	order by apt.UpdatedDateTime
+
+	set @totalRecords = @@ROWCOUNT
+
+	select *,
+		@totalRecords as TotalRecords
+	from @tempTableAppointments
+	order by UpdatedDateTime
+		--FETCH ONLY WORKS IF SQL SERVER IS 2012 OR ABOVE  
+		OFFSET @pageSize * (@currentPage - 1) ROWS
+
+	fetch next @pageSize ROWS only
+end
