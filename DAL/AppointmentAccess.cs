@@ -258,6 +258,36 @@ namespace DAL
             }            
             return appointlist.ToList();
         }
+        public async Task<List<Status>> GetAllStatus()
+        {
+            List<Status> statusList = new List<Status>();
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    con.Open();
+                    using (SqlCommand command = new SqlCommand("dbo.GetAllStatus", con))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;                        
+                        SqlDataReader rdr = await command.ExecuteReaderAsync();
+                        while (rdr.Read())
+                        {
+                            Status sts = new Status();
+                            sts.Name = (string)rdr["Name"];
+                            sts.Id = Convert.ToInt32(rdr["Id"]);
+                            statusList.Add(sts);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,"Error Occured While Calling the GetAllStatus Method");
+            }
+            return statusList;
+        }
 
 
     }

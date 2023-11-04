@@ -1,4 +1,4 @@
-﻿
+﻿@model AppointmentSearchParms
 
 <div class="row">
     <div class="col-md-6">
@@ -8,13 +8,8 @@
        </select>
     </div>
     <div class="col-md-6">
-        <label>Status</label>
-        <select id="statusDropdown" class="form-control">
-            <option value="0">All</option>
-            <option value="1">Scheduled</option>
-            <option value="2">Cancelled</option>
-            <option value="3">Closed</option>
-        </select>
+        <label>Status</label>        
+        @Html.DropDownListFor(m => m.SelectedStatusId,Model.StatusList,new{@id="statusDropdown",@class="form-control"})
     </div>
     <div class="row margin-top-10">
         <div class="col-md-6">

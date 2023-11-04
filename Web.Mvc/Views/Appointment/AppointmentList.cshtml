@@ -6,7 +6,7 @@
 <div class="header-container">
     <h1>Appointment List</h1>
     @{
-        await Html.RenderPartialAsync("_Search");
+        await Html.RenderPartialAsync("_Search",Model.SearchParms);
     }
 </div>
 

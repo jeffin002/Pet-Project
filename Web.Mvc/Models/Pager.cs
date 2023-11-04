@@ -1,6 +1,4 @@
-﻿using Model;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace Web.Mvc.Models
 {
@@ -41,12 +39,5 @@ namespace Web.Mvc.Models
         public int TotalPages { get; private set; }
         public int StartPage { get; private set; }
         public int EndPage { get; private set; }
-    }
-
-    public class AppointmentListContainer
-    {
-        public List<Appointment> AppointmentList { get; set; }
-
-        public Pager PagingInfo { get; set; }
     }
 }

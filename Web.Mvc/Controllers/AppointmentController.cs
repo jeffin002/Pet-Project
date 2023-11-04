@@ -169,15 +169,19 @@ namespace Web.Mvc.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<AppointmentListContainer>> GetAllAppointments([FromQuery]AppointmentsSearchParm request)
+        public async Task<ActionResult<AppointmentListContainer>> GetAllAppointments([FromQuery]AppointmentSearchParms request)
         {
             try
             {
                 //Pager p = new Pager(35,1,10);
                 //p.CurrentPage = 2;
+                
                 AppointmentAccess apt = new AppointmentAccess(_config, _factory.CreateLogger<AppointmentAccess>());
                 List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper(request.CurrentPage,request.PageSize);
+                List<Status> statuslist = await apt.GetAllStatus(); 
                 AppointmentListContainer container = new AppointmentListContainer();
+                container.SearchParms = new AppointmentSearchParms();                
+                container.SearchParms.StatusList = statuslist.ToViewModel();
                 container.AppointmentList = appointmentlist;
                 container.PagingInfo = new Pager(appointmentlist.First().TotalRecords,request.CurrentPage,request.PageSize);               
                 return View("AppointmentList", container);
