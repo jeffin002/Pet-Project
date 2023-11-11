@@ -4,7 +4,7 @@
     if (aptId <= 0) {
         getAllDoctors();
     }
-    
+
     $('#btnsubmit').click(function (event) {
         event.preventDefault();
         var firstName = $('#firstname').val();
@@ -130,7 +130,7 @@
     })
     $('#btncreate').click(function (event) {
 
-        
+
         const isUpdate = aptId > 0;
         event.preventDefault();
         var petname = $('#petname').val();
@@ -221,12 +221,12 @@
             url: "/Appointment/GetAllDoctors",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            success: function (response) {                
+            success: function (response) {
                 if (response != null) {
                     var firstitem = { id: 0, fullName: 'select a doctor' };
                     response.unshift(firstitem);
                     console.log(response);
-                    $.each(response, function (index, doctor) {                        
+                    $.each(response, function (index, doctor) {
                         console.log("doctor is:", doctor);
                         console.log("index is :", index);
                         $('#ddl-doctor').append($('<option>').text(doctor.fullName).attr('value', doctor.id));
@@ -278,18 +278,18 @@
         console.log(appointmentId);
         $.ajax({
             type: 'Get',
-            url: `/Appointment/Index?id=${appointmentId}`,            
+            url: `/Appointment/Index?id=${appointmentId}`,
             success: function (response) {
                 console.log(response);
 
-                if (response != null) {                    
-                  $('#description').val(response.description);
-                  $('#petname').val(response.petName);
-                                       
-                    
+                if (response != null) {
+                    $('#description').val(response.description);
+                    $('#petname').val(response.petName);
+
+
                 }
                 window.location.href = '/Appointment/Index';
-               
+
             },
             error: function (xhr, textStatus, errorThrown) {
 
@@ -301,31 +301,42 @@
     $('.lnk-pager').on('click', function (event) {
         event.preventDefault();
         var currentPage = $(this).data('currentpage');
-        //var currentPagestr = $(this).attr('data-currentpage');
+        var selectedDoctorId = $('#ddlDoctor').val();
+        var selectedStatusId = $('#statusDropdown').val();
+        console.log("doctorid",selectedDoctorId);
+        console.log("statusid",selectedStatusId);
 
-        //console.log(`type of currentpage = ${typeof currentPage},${typeof currentPagestr}`);
-
-        window.location.href = `/Appointment/GetAllAppointments?currentPage=${currentPage}&pageSize=10`;
-        //$.ajax({
-        //    type: 'Get',
-        //    url: `/Appointment/GetAllAppointments ${currentPage}`,
-        //    success: function (response) {
-        //        console.log(response);
-
-        //        if (response != null) {
-        //            $('#description').val(response.description);
-        //            $('#petname').val(response.petName);
-
-
-        //        }
-        //        window.location.href = '/Appointment/Index';
-
-        //    },
-        //    error: function (xhr, textStatus, errorThrown) {
-
-        //        console.log('AJAX Error: ' + errorThrown);
-        //    }
-        //});
+        window.location.href = `/Appointment/GetAllAppointments?currentPage=${currentPage}&pageSize=10&SelectedDoctorId=${selectedDoctorId}&SelectedStatusId=${selectedStatusId}`;
     });
 
- });
+    $('#searchButton').click(function () {
+        var selectedDoctorId = $('#ddlDoctor').val();
+        console.log(selectedDoctorId);
+        var selectedStatusId = $('#statusDropdown').val();
+        console.log(selectedStatusId);
+        var data = {
+            CurrentPage: 1,
+            PageSize: 10,
+            SelectedStatusId: selectedStatusId,
+            SelectedDoctorId: selectedDoctorId
+        };
+        //$.ajax({
+        //    type: 'GET',
+        //    url: `/Appointment/GetAllAppointments?CurrentPage=1&PageSize=10&SelectedStatusId=${data.SelectedStatusId}&SelectedDoctorId=${data.SelectedDoctorId}`,
+        //    //data: JSON.stringify(data),
+        //    //contentType: 'application/json; charset=utf-8',
+        //    //dataType: 'json',
+        //    //success: function (result) {
+        //    //    console.log(result);
+        //    //},
+        //    //error: function (error) {
+        //    //    // Handle errors here
+        //    //}
+            
+
+        //});
+
+        window.location.href = `/Appointment/GetAllAppointments?CurrentPage=1&PageSize=10&SelectedStatusId=${data.SelectedStatusId}&SelectedDoctorId=${data.SelectedDoctorId}`;
+    });
+
+});

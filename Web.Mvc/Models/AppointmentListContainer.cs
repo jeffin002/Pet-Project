@@ -17,8 +17,10 @@ namespace Web.Mvc.Models
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
         public int SelectedStatusId { get; set; }
-        public string SearchTerm { get; set; }
+        public int SelectedDoctorId { get; set; }
+        //public string SearchTerm { get; set; }
         public IEnumerable<SelectListItem> StatusList { get; set; }
+        public IEnumerable<SelectListItem> DoctorList { get; set; }
 
 
         //public Address SearchAddress { get; set; }

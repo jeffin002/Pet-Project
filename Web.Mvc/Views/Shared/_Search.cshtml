@@ -2,10 +2,9 @@
 
 <div class="row">
     <div class="col-md-6">
-        <label for="searchInpput">Search Doctor Name</label>
-       <select id="ddlDoctor" class="form-control">
+        <label for="searchInput">Select Doctor Name</label>       
+        @Html.DropDownListFor(m => m.SelectedDoctorId,Model.DoctorList,new{@id="ddlDoctor",@class="form-control"})
 
-       </select>
     </div>
     <div class="col-md-6">
         <label>Status</label>        

@@ -4,6 +4,7 @@ using Microsoft.VisualBasic;
 using System.Diagnostics;
 
 
+
 namespace Web.Mvc.Controllers
 {
     public class HomeController : Controller 
@@ -27,7 +28,7 @@ namespace Web.Mvc.Controllers
             ViewData["Jeffin"] = "This is my test Privacy policy";
             return View();
         }
-
+      
        
     }
 }

@@ -3,21 +3,27 @@
     ViewData["Title"] = "Appointment List";
 }
 
-<div class="header-container">
-    <h1>Appointment List</h1>
-    @{
-        await Html.RenderPartialAsync("_Search",Model.SearchParms);
-    }
-</div>
+    <div class="header-container">
+        <h1>Appointment List</h1>
+        @{
+            await Html.RenderPartialAsync("_Search", Model.SearchParms);
+        }
+    </div>
+
+
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<div class="custom-paging">
-    @{
-        await Html.RenderPartialAsync("_Pagination",Model.PagingInfo);
-    }
-</div>
+@if(Model.AppointmentList.Count > 0)
+{
+    <div class="custom-paging">
+        @{
+            await Html.RenderPartialAsync("_Pagination", Model.PagingInfo);
+        }
+    </div>
+}
+
 <table class="table table-striped">
     <thead>
         <tr>
@@ -41,38 +47,51 @@
             </th>
         </tr>
     </thead>
+    
     <tbody>
-@foreach (var item in Model.AppointmentList) {
-            var statusName = item.StatusName;
+        @if(Model.AppointmentList.Count > 0)
+        {
+            @foreach (var item in Model.AppointmentList)
+            {
+                var statusName = item.StatusName;
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DoctorFullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PetName)
+                    </td>
+
+                    <td class="@(statusName == "Cancelled"?"field-validation-error":" ")">
+
+                        @Html.DisplayFor(modelItem => item.StatusName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UpdatedDateTime)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit","Index","Appointment",new{id = item.Id}) &nbsp|   &nbsp;
+                        @* <a href="Index" class="lnk-edit" data-id="@item.Id">Edit</a> &nbsp|   &nbsp;*@
+
+                        <a href="#" class="lnk-delete" data-id="@item.Id">Delete</a> &nbsp;|&nbsp;
+
+                        <a href="#" class="lnk-cancel" data-id="@item.Id">Cancel</a> &nbsp;|&nbsp;
+
+                        <a href="#" class="lnk-complete" data-id="@item.Id">Complete</a>
+                    </td>
+                </tr>
+            }
+        }else
+        {
             <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>  
-            <td>
-                @Html.DisplayFor(modelItem => item.DoctorFullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PetName)
-            </td>  
-            
-                <td class="@(statusName == "Cancelled"?"field-validation-error":" ")">
+                <td colspan="6">
+                    No data to display at this time 
+                </td>
+            </tr>
+        }
 
-                @Html.DisplayFor(modelItem => item.StatusName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedDateTime)
-            </td>
-            <td>
-                    @Html.ActionLink("Edit","Index","Appointment",new{id = item.Id}) &nbsp|   &nbsp;
-                  @* <a href="Index" class="lnk-edit" data-id="@item.Id">Edit</a> &nbsp|   &nbsp;*@
-
-                    <a href="#" class="lnk-delete" data-id="@item.Id">Delete</a> &nbsp;|&nbsp;
-
-                    <a href="#" class="lnk-cancel" data-id="@item.Id">Cancel</a> &nbsp;|&nbsp;
-
-                    <a href="#" class="lnk-complete" data-id="@item.Id">Complete</a> 
-            </td>
-        </tr>
-}
     </tbody>
 </table>

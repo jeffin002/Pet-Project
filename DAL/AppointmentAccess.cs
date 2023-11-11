@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO.Compression;
 using Dapper;
 using Microsoft.Extensions.Logging;
+using System.Numerics;
 
 namespace DAL
 {
@@ -18,7 +19,7 @@ namespace DAL
         private readonly string _connectionString;
         private ILogger<AppointmentAccess> _logger;
 
-        public AppointmentAccess(IConfiguration config,ILogger<AppointmentAccess> logger)
+        public AppointmentAccess(IConfiguration config, ILogger<AppointmentAccess> logger)
         {
             _connectionString = config.GetConnectionString("MyConnection");
             _logger = logger;
@@ -85,7 +86,7 @@ namespace DAL
             return breedList;
         }
 
-       public async Task<List<Doctor>> AllDoctorList()
+        public async Task<List<Doctor>> AllDoctorList()
         {
             List<Doctor> doctorList = new List<Doctor>();
 
@@ -100,10 +101,10 @@ namespace DAL
                         SqlDataReader rdr = await command.ExecuteReaderAsync();
                         while (rdr.Read())
                         {
-                             Doctor dr = new Doctor();                            
-                            dr.FirstName= (string)rdr["FirstName"];
-                            dr.LastName= (string)rdr["LastName"];
-                            dr.FullName= (string)rdr["FullName"];
+                            Doctor dr = new Doctor();
+                            dr.FirstName = (string)rdr["FirstName"];
+                            dr.LastName = (string)rdr["LastName"];
+                            dr.FullName = (string)rdr["FullName"];
                             dr.Id = Convert.ToInt32(rdr["Id"]);
                             doctorList.Add(dr);
                         }
@@ -139,7 +140,7 @@ namespace DAL
                             Appointment apt = new Appointment();
                             apt.DoctorFullName = (string)rdr["DoctorFullName"];
                             apt.PetName = (string)rdr["PetName"];
-                            apt.StatusName= (string)rdr["StatusName"];
+                            apt.StatusName = (string)rdr["StatusName"];
                             apt.Id = Convert.ToInt32(rdr["Id"]);
                             apt.UpdatedDateTime = (DateTime)rdr["UpdatedDateTime"];
                             appointlist.Add(apt);
@@ -162,7 +163,7 @@ namespace DAL
                 {
                     SqlCommand objSqlCommand = new SqlCommand("dbo.DeleteAppointment", con);
                     objSqlCommand.CommandType = CommandType.StoredProcedure;
-                    objSqlCommand.Parameters.AddWithValue("@DeleteId", deleteId);                    
+                    objSqlCommand.Parameters.AddWithValue("@DeleteId", deleteId);
                     con.Open();
                     objSqlCommand.ExecuteNonQuery();
                 }
@@ -186,12 +187,12 @@ namespace DAL
                     con.Open();
                     SqlDataReader rdr = await objSqlCommand.ExecuteReaderAsync();
                     while (rdr.Read())
-                    {                       
+                    {
                         apt.Description = (string)rdr["Description"];
                         apt.PetName = (string)rdr["PetName"];
                         apt.DoctorFullName = (string)rdr["FullName"];
                         apt.Id = Convert.ToInt32(rdr["Id"]);
-                        apt.DoctorId= Convert.ToInt32(rdr["DoctorId"]);                        
+                        apt.DoctorId = Convert.ToInt32(rdr["DoctorId"]);
                     }
                 }
             }
@@ -209,9 +210,12 @@ namespace DAL
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    var parameters = new { Id = appointment.Id,
-                                           DoctorId = appointment.DoctorId,
-                                           Description = appointment.Description };
+                    var parameters = new
+                    {
+                        Id = appointment.Id,
+                        DoctorId = appointment.DoctorId,
+                        Description = appointment.Description
+                    };
 
                     await connection.ExecuteAsync
                         (
@@ -226,7 +230,7 @@ namespace DAL
             }
         }
 
-        public async Task<List<Appointment>> GetAllAppointmentsDapper(int currentPage,int pageSize)
+        public async Task<List<Appointment>> GetAllAppointmentsDapper(int currentPage, int pageSize,int? doctorId,int? statusId)
         {
             IEnumerable<Appointment> appointlist = new List<Appointment>();
             try
@@ -240,12 +244,14 @@ namespace DAL
                          new
                          {
                              currentPage,
-                             pageSize
+                             pageSize,
+                             doctorId,
+                             statusId
                          },
                          commandType: System.Data.CommandType.StoredProcedure
                         );
-                    
-                }               
+
+                }
 
             }
             catch (SqlException Sqlex)
@@ -254,8 +260,8 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,"Error Occured While Calling the GetAllAppointments Method");
-            }            
+                _logger.LogError(ex, "Error Occured While Calling the GetAllAppointments Method");
+            }
             return appointlist.ToList();
         }
         public async Task<List<Status>> GetAllStatus()
@@ -269,7 +275,7 @@ namespace DAL
                     con.Open();
                     using (SqlCommand command = new SqlCommand("dbo.GetAllStatus", con))
                     {
-                        command.CommandType = CommandType.StoredProcedure;                        
+                        command.CommandType = CommandType.StoredProcedure;
                         SqlDataReader rdr = await command.ExecuteReaderAsync();
                         while (rdr.Read())
                         {
@@ -284,12 +290,93 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,"Error Occured While Calling the GetAllStatus Method");
+                _logger.LogError(ex, "Error Occured While Calling the GetAllStatus Method");
             }
             return statusList;
         }
 
+        public async Task<List<Appointment>> GetAllAppointmentsDapperBySearch(int currentPage, int pageSize, int doctorId, int statusId)
+        {
+            IEnumerable<Appointment> appointlist = new List<Appointment>();
+            try
+            {
+                if (statusId == 0)
+                {
 
+
+                    using (SqlConnection connection = new SqlConnection(_connectionString))
+                    {
+
+                        appointlist = await connection.QueryAsync<Appointment>
+                            (
+                             "GetAllAppointments",
+                             new
+                             {
+                                 currentPage,
+                                 pageSize,
+                                 doctorId,
+                             },
+                             commandType: System.Data.CommandType.StoredProcedure
+                            );
+
+                    }
+
+
+                }
+                else
+                    using (SqlConnection connection = new SqlConnection(_connectionString))
+                    {
+
+                        appointlist = await connection.QueryAsync<Appointment>
+                            (
+                             "GetAllAppointments",
+                             new
+                             {
+                                 currentPage,
+                                 pageSize,
+                                 doctorId,
+                                 statusId
+                             },
+                             commandType: System.Data.CommandType.StoredProcedure
+                            );
+
+                    }
+
+            }
+
+            catch (SqlException Sqlex)
+            {
+                _logger.LogError(Sqlex, "Error Occured While Calling the GetAllAppointments Method");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error Occured While Calling the GetAllAppointments Method");
+            }
+            return appointlist.ToList();
+        }
+        public void AddUser(Register register)
+        {
+            using (SqlConnection con = new SqlConnection(_connectionString))
+            {
+                try
+                {
+                    SqlCommand objSqlCommand = new SqlCommand("dbo.AddUser", con);
+                    objSqlCommand.CommandType = CommandType.StoredProcedure;
+                    objSqlCommand.Parameters.AddWithValue("@FirstName", register.FirstName);
+                    objSqlCommand.Parameters.AddWithValue("@LastName", register.LastName);
+                    objSqlCommand.Parameters.AddWithValue("@Email", register.Email);
+                    objSqlCommand.Parameters.AddWithValue("@Username", register.Username);
+                    objSqlCommand.Parameters.AddWithValue("@Password", register.Password);
+                    objSqlCommand.Parameters.AddWithValue("@PasswordSalt", register.PasswordSalt);
+                    con.Open();
+                    objSqlCommand.ExecuteNonQuery();
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
     }
 
 }

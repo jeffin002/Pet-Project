@@ -172,18 +172,23 @@ namespace Web.Mvc.Controllers
         public async Task<ActionResult<AppointmentListContainer>> GetAllAppointments([FromQuery]AppointmentSearchParms request)
         {
             try
-            {
-                //Pager p = new Pager(35,1,10);
-                //p.CurrentPage = 2;
-                
+            {              
+
+                int? doctorId = request.SelectedDoctorId == 0 ? null : request.SelectedDoctorId ;
+                int? statusId = request.SelectedStatusId == 0 ? null : request.SelectedStatusId;
                 AppointmentAccess apt = new AppointmentAccess(_config, _factory.CreateLogger<AppointmentAccess>());
-                List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper(request.CurrentPage,request.PageSize);
-                List<Status> statuslist = await apt.GetAllStatus(); 
+                List<Appointment> appointmentlist = await apt.GetAllAppointmentsDapper(request.CurrentPage, request.PageSize, doctorId, statusId);
+                List<Status> statuslist = await apt.GetAllStatus();
+                List<Doctor> doctorList = await apt.AllDoctorList();
                 AppointmentListContainer container = new AppointmentListContainer();
                 container.SearchParms = new AppointmentSearchParms();                
                 container.SearchParms.StatusList = statuslist.ToViewModel();
+                container.SearchParms.DoctorList = doctorList.ToDoctorViewModel();
                 container.AppointmentList = appointmentlist;
-                container.PagingInfo = new Pager(appointmentlist.First().TotalRecords,request.CurrentPage,request.PageSize);               
+                if(appointmentlist.Count > 0)
+                {
+                 container.PagingInfo = new Pager(appointmentlist.First().TotalRecords, request.CurrentPage, request.PageSize);
+                }
                 return View("AppointmentList", container);
             }
             catch (DivideByZeroException ex)
@@ -199,26 +204,6 @@ namespace Web.Mvc.Controllers
             }
         }
 
-
-        //[HttpPost]        
-        //public IActionResult DeleteAppointment([FromBody] int appointmentId)
-        //{
-        //    try
-        //    {
-        //        // Create an Appointment object with the ID to match the method's parameter.
-        //        Appointment appointmentToDelete = new Appointment { DeleteId = appointmentId };
-
-        //        // Call the DeleteAppointment method to delete the appointment.
-        //        .DeleteAppointment(appointmentToDelete);
-
-        //        return Ok("Appointment deleted successfully.");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        // Handle and log the exception as needed.
-
-        //    }
-        //}
 
         [HttpDelete]
         public ActionResult Delete(int deleteId)
@@ -260,7 +245,8 @@ namespace Web.Mvc.Controllers
             
             return View("appointment"); 
         }
-
+              
+        
 
 
     }

@@ -34,6 +34,22 @@ namespace Web.Mvc.Extentions
             });
             return result;
         }
+        public static List<Custom.SelectListItem> ToDoctorViewModel(this IEnumerable<Doctor> items)
+        {
+            if (items == null)
+                return null;
+            List<Custom.SelectListItem> result = items.Select(s => new Custom.SelectListItem
+            {
+                Text = s.FullName,
+                Value = s.Id.ToString()
+            }).ToList();
+            result.Insert(0, new Custom.SelectListItem
+            {
+                Text = "All",
+                Value = 0.ToString()
+            });
+            return result;
+        }
 
     }
 }
