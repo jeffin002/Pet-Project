@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
 using System;
+using Web.Mvc.Helper;
+using Web.Mvc.Models;
 
 namespace Web.Mvc
 {
@@ -19,6 +22,12 @@ namespace Web.Mvc
             {
                 var builder = WebApplication.CreateBuilder(args);
 
+                var emailConfig = builder.Configuration
+                .GetSection("EmailConfiguration")
+                .Get<EmailConfiguration>();
+                builder.Services.AddSingleton(emailConfig);
+
+                //builder.Services.AddControllers();
 
                 // Add services to the container.
                 builder.Services.AddControllersWithViews();
@@ -27,6 +36,8 @@ namespace Web.Mvc
                 builder.Host.UseNLog();
 
                 var app = builder.Build();
+
+
 
                 // Configure the HTTP request pipeline.
                 if (!app.Environment.IsDevelopment())

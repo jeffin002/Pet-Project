@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -48,8 +49,11 @@ namespace DAL
             }
             return user;
         }
-        public async Task CreateAppUser(AppUser user)
+        public async Task<(Guid,string)> CreateAppUser(AppUser user)
         {
+            Guid emailGuid = Guid.NewGuid();
+            string emailTemplate = null;
+
             try
             {
                 using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -61,13 +65,19 @@ namespace DAL
                         user.Email,
                         user.UserName,
                         user.PasswordHash,
-                        user.Salt
+                        user.Salt,
+                        Emailguid=emailGuid,
+                        Emailtemplate=emailTemplate
+
                     };
 
                     await connection.ExecuteAsync
                         (
                          "dbo.CreateAppuser", parameters, commandType: System.Data.CommandType.StoredProcedure
                         );
+                    emailGuid = parameters.Emailguid;
+                    emailTemplate = parameters.Emailtemplate;
+                    
                 }
             }
             catch (Exception ex)
@@ -75,6 +85,42 @@ namespace DAL
 
                 throw;
             }
+            return (emailGuid,emailTemplate);
+        }
+
+        public async Task<(Guid, string)> CreateAppUser_V2(AppUser user)
+        {
+            Guid emailGuid = Guid.NewGuid();
+            string emailtemplate = null;
+
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(_connectionString))
+                {
+                    var p = new DynamicParameters();
+                    p.Add("@FirstName", user.FirstName);
+                    p.Add("@LastName", user.LastName);
+                    p.Add("@Email", user.Email);
+                    p.Add("@UserName", user.UserName);
+                    p.Add("@PasswordHash", user.PasswordHash);
+                    p.Add("@Salt", user.Salt);
+                    p.Add("@Emailguid", null, dbType: DbType.Guid, direction: ParameterDirection.Output,size:null);
+                    p.Add("@Emailtemplate", null, dbType: DbType.String, direction: ParameterDirection.Output, 500);
+
+                    await connection.ExecuteAsync("dbo.CreateAppuser", p, commandType: CommandType.StoredProcedure);
+
+                    emailGuid = p.Get<Guid>("@Emailguid");
+                    emailtemplate = p.Get<string>("@Emailtemplate");
+                   
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            return (emailGuid, emailtemplate);
         }
     }
 }

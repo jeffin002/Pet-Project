@@ -195,3 +195,132 @@ begin
 
 	fetch next @pageSize ROWS only
 end
+
+
+create table dbo.EmailTemplate
+(
+	Id int identity(1,1) constraint pk_EmailTemplate_Id primary key,
+	Content varchar(500) not null,
+	EmailTypeId int not null constraint fk_EmailTemplate_EmailTypeId foreign key references dbo.EmailType(id)
+)
+
+create table dbo.EmailType
+(
+	Id int identity(1,1) constraint pk_EmailType_Id primary key,
+	Name varchar(100) not null	
+)
+
+create table dbo.EmailTransaction
+(
+	Id int identity(1,1) constraint pk_EmailTransaction_Id primary key,
+	AppUserId int not null constraint fk_EmailTransaction_AppUserId foreign key references dbo.AppUser(id),
+	EmailTemplateId int not null constraint fk_EmailTransaction_EmailTemplateId foreign key references dbo.EmailTemplate(id),	
+	EmailGuid uniqueidentifier not null,
+	CreatedDateTime datetime not null constraint df_EmailTransaction_CreatedDateTime default getdate()	
+)
+
+
+if not exists(select 1 from information_schema.columns c where c.TABLE_NAME = 'AppUser' and c.TABLE_SCHEMA='dbo')
+begin
+create table dbo.AppUser
+(
+	Id int identity(1,1) constraint pk_Appuser_Id primary key,
+	FirstName varchar(100) not null,
+	LastName varchar(100) not null,
+	Email varchar(50) not null,
+	UserName varchar(100)not null constraint uq_AppUser_UserName unique ,
+	PasswordHash varchar(500) not null,
+	PasswordSalt varchar(100) not null,
+	CreatedDate varchar(50) not null
+)
+end
+else
+print('dbo.appuser alredy exists')
+
+
+
+
+drop table AppUser
+create procedure dbo.AddUser
+(
+    @Name varchar(100),
+	@Email varchar(50),
+	@UserName varchar(100),
+	@Password varchar(50)
+)
+as
+begin
+insert into AppUser values(@Name,@Email,@UserName,@Password,GETDATE())
+end
+
+
+
+\
+alter procedure dbo.CreateAppuser (  
+ @FirstName varchar(100),  
+ @LastName varchar(100),  
+ @Email varchar(50),  
+ @UserName varchar(100),  
+ @PasswordHash varchar(100),  
+ @Salt varchar(100),  
+ @Emailguid uniqueidentifier output  
+ )  
+as  
+begin  
+ declare @UserId int,
+ @EmailTemplateId int
+ 
+ set @Emailguid=newid(); 
+ set @EmailTemplateId=(select et.Id from EmailTemplate et inner join dbo.EmailType et1 on et.EmailTypeId=et1.Id where et1.Name='Register') 
+ 
+  
+ insert into dbo.AppUser (  
+  FirstName,  
+  LastName,  
+  Email,  
+  UserName,  
+  PasswordHash,  
+  Salt,  
+  EmailVerified  
+  )  
+ values (  
+  @FirstName,  
+  @LastName,  
+  @Email,  
+  @UserName,  
+  @PasswordHash,  
+  @Salt,
+  0   
+  )  
+  
+ set @UserId = scope_identity();  
+  
+ if (  
+   @UserId is not null  
+   and @UserId > 0  
+   )  
+ begin  
+  insert into dbo.passwordHistory (  
+   AppUserId,  
+   PasswordHash,  
+   Salt  
+   )  
+  values (  
+   @UserId,  
+   @PasswordHash,  
+   @Salt  
+   )
+   insert into dbo.EmailTransaction (
+   AppUserId,
+   EmailTemplateId,   
+   EmailGuid
+   )
+   values(
+   @UserId,
+   @EmailTemplateId,
+   @Emailguid
+
+   )
+ end  
+
+end

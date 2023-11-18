@@ -17,6 +17,7 @@
   <ItemGroup>
 	  <!--<PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.9" />-->
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
+    <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.4" />
   </ItemGroup>
 
